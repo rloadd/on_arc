@@ -31,7 +31,7 @@ At https://rloadd.github.io/on_arc/ (this repo) I am unifying ARC documentation 
 
 ## Regular tests
 
-The core of the tests are that included in the main repo or ARC. Docker will build the image cloning the repo and making get ready the executable in a row. Nothing has to be installed or compiled separatedly except, obviously the docker environment and tools.
+The core tests are the ones included in the main repo or ARC. Docker will build the image by cloning the repo and preparing the executable at once. Nothing has to be cloned, installed or compiled separately, except, obviously, the Docker environment and tools.
 
 This directory provides a config.yaml and the rest of the config files aligned with the docker-compose files provided.
 

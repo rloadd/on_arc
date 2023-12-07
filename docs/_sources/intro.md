@@ -10,7 +10,7 @@ possible to connect to a large number of nodes without incurring large bandwidth
 
 The ARC design decouples the core functions of a transaction processor and encapsulates them as microservices with the ability to scale horizontally adaptively. Interaction between microservices is decoupled using asynchronous messaging where possible.
 
-![Architecture](arc_january_2023.png)
+![Architecture](arc_january_2023-v2.png)
 
 ARC mainly consists of four microservices: [API](main_api), [Metamorph](main_metamorph), [BlockTx](main_blocktx) and [Callbacker](main_callbacker), which are all described in this documentation.
 

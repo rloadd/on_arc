@@ -347,7 +347,7 @@ document.write(`
 interface of a single Bitcoin node. This makes it possible for ARC to connect and broadcast to any number of nodes, as many as are desired. In the future, ARC will be also able to send transactions using ipv6 multicast, which will make it
 possible to connect to a large number of nodes without incurring large bandwidth costs.</p>
 <p>The ARC design decouples the core functions of a transaction processor and encapsulates them as microservices with the ability to scale horizontally adaptively. Interaction between microservices is decoupled using asynchronous messaging where possible.</p>
-<p><img alt="Architecture" src="_images/arc_january_2023.png" /></p>
+<p><img alt="Architecture" src="_images/arc_january_2023-v2.png" /></p>
 <p>ARC mainly consists of four microservices: <a class="reference internal" href="main_api.html"><span class="doc std std-doc">API</span></a>, <a class="reference internal" href="main_metamorph.html"><span class="doc std std-doc">Metamorph</span></a>, <a class="reference internal" href="main_blocktx.html"><span class="doc std std-doc">BlockTx</span></a> and <a class="reference internal" href="main_callbacker.html"><span class="doc std std-doc">Callbacker</span></a>, which are all described in this documentation.</p>
 <div class="toctree-wrapper compound">
 </div>
