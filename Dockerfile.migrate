@@ -1,0 +1,9 @@
+FROM migrate/migrate:v4.16.2
+
+# Set the Current Working Directory inside the container
+WORKDIR /tmp
+
+RUN apk add git
+RUN git clone https://github.com/bitcoin-sv/arc.git
+RUN mv arc/database/migrations /
+WORKDIR /migrations
