@@ -80,7 +80,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'tx_standard_vs_extended';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Extended format" href="tx_extended.html" />
+    <link rel="next" title="Extended format efficiency" href="tx_extended.html" />
     <link rel="prev" title="Callbacker" href="main_callbacker.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="None"/>
@@ -176,7 +176,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Transactions</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Transaction formats</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tx_extended.html">Extended format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx_extended.html">Extended format efficiency</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tx_flux.html">Transaction lifecycle</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Usage</span></p>
@@ -353,8 +353,7 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="transaction-formats">
 <h1>Transaction formats<a class="headerlink" href="#transaction-formats" title="Permalink to this headline">#</a></h1>
-<p>ARC has been designed to save request to the Bitcoin network. For this reason it is expected that transactions come in an extended format. Transactions in standard format requires a pretreatment to convert each tx into one in extended format to pass through the ARC pipeline.</p>
-<p>That pretreatment detracts from the expected efficiency of the process because it requires extra requests to the Bitcoin network. Therefore, it is expected that the trend will be to use the extended format, which may be the only one supported in the future.</p>
+<p>ARC has been designed to save requests to the Bitcoin network, improving in that way the global efficiency.</p>
 <p>Comparison beteen extended and standard format is the following (can be found in detail in BIP-239 / <a class="reference external" href="https://github.com/bitcoin-sv/BRCs/blob/master/transactions/0030.md">BRC-30</a>).</p>
 <section id="standard-format">
 <h2>Standard Format<a class="headerlink" href="#standard-format" title="Permalink to this headline">#</a></h2>
@@ -487,7 +486,7 @@ document.write(`
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Extended format</p>
+        <p class="prev-next-title">Extended format efficiency</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

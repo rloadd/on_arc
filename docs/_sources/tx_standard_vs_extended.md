@@ -1,9 +1,7 @@
 
 # Transaction formats
 
-ARC has been designed to save request to the Bitcoin network. For this reason it is expected that transactions come in an extended format. Transactions in standard format requires a pretreatment to convert each tx into one in extended format to pass through the ARC pipeline.
-
-That pretreatment detracts from the expected efficiency of the process because it requires extra requests to the Bitcoin network. Therefore, it is expected that the trend will be to use the extended format, which may be the only one supported in the future.
+ARC has been designed to save requests to the Bitcoin network, improving in that way the global efficiency. 
 
 Comparison beteen extended and standard format is the following (can be found in detail in BIP-239 / [BRC-30](https://github.com/bitcoin-sv/BRCs/blob/master/transactions/0030.md)).
 

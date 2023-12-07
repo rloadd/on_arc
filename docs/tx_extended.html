@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Extended format &#8212; ARC Documentation</title>
+    <title>Extended format efficiency &#8212; ARC Documentation</title>
   
   
   
@@ -176,7 +176,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Transactions</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="tx_standard_vs_extended.html">Transaction formats</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Extended format</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Extended format efficiency</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tx_flux.html">Transaction lifecycle</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Usage</span></p>
@@ -314,7 +314,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -325,11 +327,20 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Extended format</h1>
+    <h1>Extended format efficiency</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-format-treatment-impact">Standard format treatment impact</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extended-format-flow">Extended format flow</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -339,16 +350,24 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="extended-format">
-<h1>Extended format<a class="headerlink" href="#extended-format" title="Permalink to this headline">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="extended-format-efficiency">
+<h1>Extended format efficiency<a class="headerlink" href="#extended-format-efficiency" title="Permalink to this headline">#</a></h1>
 <p>For optimal performance, ARC uses a custom format for transactions. This format is called the extended format, and is a superset of the raw transaction format. The extended format includes the satoshis and scriptPubKey for each input, which makes it possible for ARC to validate the transaction without having to download the parent transactions. In most cases the sender already has all the information from the parent transaction, as this is needed to sign the transaction.</p>
 <p>The only check that cannot be done on a transaction in the extended format is the check for double spends. This can only be done by downloading the parent transactions, or by querying a utxo store. A robust utxo store is still in development and will be added to ARC when it is ready. At this moment, the utxo check is performed in the Bitcoin node when a transaction is sent to the network.</p>
 <p>With the successful adoption of Bitcoin ARC, this format shou   ld establish itself as the new standard of interchange between wallets and non-mining nodes on the network.</p>
 <p>The extended format has been described in detail in BIP-239 / <a class="reference external" href="https://github.com/bitcoin-sv/BRCs/blob/master/transactions/0030.md">BRC-30</a>.</p>
 <p>The following diagrams show the difference between validating a transaction in the standard and extended format:</p>
-<p>That pretreatment detracts from the efficiency of the process because it requires extra requests to the Bitcoin network. Therefore, it is expected that the trend will be to use the extended format, which may be the only one supported in the future.</p>
-<p>Using the standard format requires pretreatment to be converted to an extended format to pass through the ARC pipeline.</p>
+<section id="standard-format-treatment-impact">
+<h2>Standard format treatment impact<a class="headerlink" href="#standard-format-treatment-impact" title="Permalink to this headline">#</a></h2>
+<p>For this reason it is expected that transactions come in an extended format. Transactions in standard format requires a pretreatment to convert each tx into one in extended format to pass through the ARC pipeline.</p>
+<p>That pretreatment detracts from the expected efficiency of the process because it requires extra requests to the Bitcoin network. Therefore, it is expected that the trend will be to use the extended format, which may be the only one supported in the future.</p>
 <p><img alt="Standard transaction flow." src="_images/uml_flow_tx_standard.png" /></p>
+</section>
+<section id="extended-format-flow">
+<h2>Extended format flow<a class="headerlink" href="#extended-format-flow" title="Permalink to this headline">#</a></h2>
+<p>In contrast, the extended format allows the API to perform a preliminary validation and rule out malformed transactions by reviewing the transaction data provided in the extended fashion. Obviously, double spending (for example) cannot be checked without an updated utxo set and it is assumed that the API does not have this data. Therefore, the “validator” subfunction within the API filters as much as it can to reduce spurious transactions passing through the pipeline but leaves others for the bitcoin nodes themselves.</p>
+<p><img alt="Extended transaction format. Typical flow." src="_images/uml_transaction_flow.png" /></p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -409,6 +428,21 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-format-treatment-impact">Standard format treatment impact</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extended-format-flow">Extended format flow</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
