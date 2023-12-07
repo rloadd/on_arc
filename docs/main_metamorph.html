@@ -175,7 +175,7 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Transactions</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="tx_standard_vs_extended.html">Transaction flux</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx_standard_vs_extended.html">Transaction formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tx_extended.html">Extended format</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tx_flux.html">Transaction lifecycle</a></li>
 </ul>
@@ -340,11 +340,6 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metamorph-transaction-statuses">Metamorph transaction statuses</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connections-to-bitcoin-nodes">Connections to Bitcoin nodes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whitelisting">Whitelisting</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hand-on-lab">Hand on lab</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#command-line">Command line</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-docker">Using docker</a></li>
-</ul>
-</li>
 </ul>
             </nav>
         </div>
@@ -455,26 +450,29 @@ nodes will be used to listen for transaction INV message, which will trigger the
 <h2>Whitelisting<a class="headerlink" href="#whitelisting" title="Permalink to this headline">#</a></h2>
 <p>Metamorph is talking to the Bitcoin nodes over the p2p network. If metamorph sends invalid transactions to the
 Bitcoin node, it will be <strong>banned</strong> by that node. Either make sure not to send invalid or double spend transactions through metamorph, or make sure that all metamorph servers are <strong>whitelisted</strong> on the Bitcoin nodes they are connecting to.</p>
-</section>
-<section id="hand-on-lab">
-<h2>Hand on lab<a class="headerlink" href="#hand-on-lab" title="Permalink to this headline">#</a></h2>
-<section id="command-line">
-<h3>Command line<a class="headerlink" href="#command-line" title="Permalink to this headline">#</a></h3>
-<p>You can run metamorph like this:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>go<span class="w"> </span>run<span class="w"> </span>cmd/metamorph/main.go
-</pre></div>
-</div>
-<p>or using the generic <code class="docutils literal notranslate"><span class="pre">main.go</span></code>:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>go<span class="w"> </span>run<span class="w"> </span>main.go<span class="w"> </span>-metamorph<span class="o">=</span><span class="nb">true</span>
-</pre></div>
-</div>
-<p>The only difference between the two is that the generic <code class="docutils literal notranslate"><span class="pre">main.go</span></code> starts the Go profiler, while the specific
-<code class="docutils literal notranslate"><span class="pre">cmd/metamorph/main.go</span></code> command does not.</p>
-</section>
-<section id="using-docker">
-<h3>Using docker<a class="headerlink" href="#using-docker" title="Permalink to this headline">#</a></h3>
-<p>In this repository you can find Dockerfile and docker-compose to run metamorph and it needs as docker containers.</p>
-</section>
+<!-- ## Hands on lab
+
+### Command line
+
+You can run metamorph like this:
+
+```shell
+go run cmd/metamorph/main.go
+```
+
+or using the generic `main.go`:
+
+```shell
+go run main.go -metamorph=true
+```
+
+The only difference between the two is that the generic `main.go` starts the Go profiler, while the specific
+`cmd/metamorph/main.go` command does not.
+
+### Using docker
+
+
+In this repository you can find Dockerfile and docker-compose to run metamorph and it needs as docker containers. -->
 </section>
 </section>
 
@@ -549,11 +547,6 @@ Bitcoin node, it will be <strong>banned</strong> by that node. Either make sure 
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metamorph-transaction-statuses">Metamorph transaction statuses</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connections-to-bitcoin-nodes">Connections to Bitcoin nodes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whitelisting">Whitelisting</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hand-on-lab">Hand on lab</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#command-line">Command line</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-docker">Using docker</a></li>
-</ul>
-</li>
 </ul>
   </nav></div>
 

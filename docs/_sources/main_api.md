@@ -1,12 +1,13 @@
 # API
 
-API is the REST API microservice for interacting with ARC. See the [API documentation](/arc/api.html) for more information.
+API is the REST API microservice for interacting with ARC. See the [API documentation](https://bitcoin-sv.github.io/arc/api.html) for more information.
 
 The API takes care of authentication, validation, and sending transactions to Metamorph.  The API talks to one or more Metamorph instances using client-based, round robin load balancing.
 
 
 ## Authorization
 
+[..]
 
 ## Validation
 
@@ -36,8 +37,8 @@ Following table shows available header options.
 
 
 
-This curl example show how can be set the callback url ARC must notify events back to the client app.
+<!-- This curl example shows how can be set the callback url ARC must notify events back to the client app.
 
 ```
 curl 
-```
+``` -->

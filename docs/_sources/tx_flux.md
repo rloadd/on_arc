@@ -5,7 +5,7 @@
 The ARC architecture has been designed to assist in the management of the transaction lifecycle, enabling better tracking of the status of each transaction, reissuing transactions until they are seen by the network and notifying the issuer of relevant status changes. This ARC feature allows clients and bitcoin wallets to be lighter and more efficient in their mission.
 
 
-![Transaction lifecycle.](uml_lifecycle.png)
+![Transaction lifecycle.](transaction_lifecycle.png)
 
 
 ARC is a transaction processor for Bitcoin that keeps track of the life cycle of a transaction as it is processed by

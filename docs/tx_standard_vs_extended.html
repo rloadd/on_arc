@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Transaction flux &#8212; ARC Documentation</title>
+    <title>Transaction formats &#8212; ARC Documentation</title>
   
   
   
@@ -81,7 +81,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Extended format" href="tx_extended.html" />
-    <link rel="prev" title="Callbacker" href="callbacker.html" />
+    <link rel="prev" title="Callbacker" href="main_callbacker.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="None"/>
   </head>
@@ -168,16 +168,16 @@ const thebe_selector_output = ".output, .cell_output"
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Main services</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="metamorph.html">Metamorph</a></li>
-<li class="toctree-l1"><a class="reference internal" href="blocktx.html">BlockTX</a></li>
-<li class="toctree-l1"><a class="reference internal" href="callbacker.html">Callbacker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="main_api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="main_metamorph.html">Metamorph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="main_blocktx.html">BlockTX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="main_callbacker.html">Callbacker</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Transactions</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Transaction flux</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Transaction formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tx_extended.html">Extended format</a></li>
-<li class="toctree-l1"><a class="reference internal" href="intro_transactions.html">Transaction lifecycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx_flux.html">Transaction lifecycle</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Usage</span></p>
 <ul class="nav bd-sidenav">
@@ -313,7 +313,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -324,11 +326,21 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Transaction flux</h1>
+    <h1>Transaction formats</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-format">Standard Format</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extended-format">Extended format</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#backward-compatibility">Backward compatibility</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -338,10 +350,95 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="transaction-flux">
-<h1>Transaction flux<a class="headerlink" href="#transaction-flux" title="Permalink to this headline">#</a></h1>
-<p>Meanwhile, the standard format requires pretreatment to be converted to an extended format to pass through the ARC pipeline.</p>
-<p>That pretreatment detracts from the efficiency of the process because it requires extra requests to the Bitcoin network. Therefore, it is expected that the trend will be to use the extended format, which may be the only one supported in the future.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="transaction-formats">
+<h1>Transaction formats<a class="headerlink" href="#transaction-formats" title="Permalink to this headline">#</a></h1>
+<p>ARC has been designed to save request to the Bitcoin network. For this reason it is expected that transactions come in an extended format. Transactions in standard format requires a pretreatment to convert each tx into one in extended format to pass through the ARC pipeline.</p>
+<p>That pretreatment detracts from the expected efficiency of the process because it requires extra requests to the Bitcoin network. Therefore, it is expected that the trend will be to use the extended format, which may be the only one supported in the future.</p>
+<p>Comparison beteen extended and standard format is the following (can be found in detail in BIP-239 / <a class="reference external" href="https://github.com/bitcoin-sv/BRCs/blob/master/transactions/0030.md">BRC-30</a>).</p>
+<section id="standard-format">
+<h2>Standard Format<a class="headerlink" href="#standard-format" title="Permalink to this headline">#</a></h2>
+<p>The input structure is the only additional thing that is changed in the Extended Format. The current input structure looks like this:</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Size</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Previous Transaction hash</p></td>
+<td><p>TXID of the transaction the output was created in</p></td>
+<td><p>32 bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p>Previous Txout-index</p></td>
+<td><p>Index of the output (Non negative integer)</p></td>
+<td><p>4 bytes</p></td>
+</tr>
+<tr class="row-even"><td><p>Txin-script length</p></td>
+<td><p>Non negative integer VI = VarInt</p></td>
+<td><p>1 - 9 bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p>Txin-script / scriptSig</p></td>
+<td><p>Script</p></td>
+<td><p><in-script length>-many bytes</p></td>
+</tr>
+<tr class="row-even"><td><p>Sequence_no</p></td>
+<td><p>Used to iterate inputs inside a payment channel. Input is final when nSequence = 0xFFFFFFFF</p></td>
+<td><p>4 bytes</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="extended-format">
+<h2>Extended format<a class="headerlink" href="#extended-format" title="Permalink to this headline">#</a></h2>
+<p>In the Extended Format, we extend the input structure to include the previous locking script and satoshi outputs. Novelties are in bold style.</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Size</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Previous Transaction hash</p></td>
+<td><p>TXID of the transaction the output was created in</p></td>
+<td><p>32 bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p>Previous Txout-index</p></td>
+<td><p>Index of the output (Non negative integer)</p></td>
+<td><p>4 bytes</p></td>
+</tr>
+<tr class="row-even"><td><p>Txin-script length</p></td>
+<td><p>Non negative integer VI = VarInt</p></td>
+<td><p>1 - 9 bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p>Txin-script / scriptSig</p></td>
+<td><p>Script</p></td>
+<td><p><in-script length>-many bytes</p></td>
+</tr>
+<tr class="row-even"><td><p>Sequence_no</p></td>
+<td><p>Used to iterate inputs inside a payment channel. Input is final when nSequence = 0xFFFFFFFF</p></td>
+<td><p>4 bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Previous TX satoshi output</strong></p></td>
+<td><p><strong>Output value in satoshis of previous input</strong></p></td>
+<td><p><strong>8 bytes</strong></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Previous TX script length</strong></p></td>
+<td><p><strong>Non negative integer VI = VarInt</strong></p></td>
+<td><p><strong>1 - 9 bytes</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Previous TX locking script</strong></p></td>
+<td><p><strong>Script</strong></p></td>
+<td><p><strong>&lt;script length&gt;-many bytes</strong></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="backward-compatibility">
+<h2>Backward compatibility<a class="headerlink" href="#backward-compatibility" title="Permalink to this headline">#</a></h2>
+<p>The Extended Format is not backwards compatible, but has been designed in such a way that existing software should not read a transaction in Extend Format as a valid (partial) transaction. The Extended Format header (0000000000EF) will be read as an empty transaction with a future nLock time in a library that does not support the Extended Format.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -376,7 +473,7 @@ document.write(`
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="callbacker.html"
+       href="main_callbacker.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
@@ -402,6 +499,22 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-format">Standard Format</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extended-format">Extended format</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#backward-compatibility">Backward compatibility</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

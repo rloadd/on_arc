@@ -9,7 +9,7 @@ transaction store. As a result, the metamorphs do not communicate with each othe
 
 
 
-#### Metamorph stores
+## Metamorph stores
 
 As an independent service, metamorph has its own database separate from the rest of the ARC services. Metamorph store has been implemented for multiple databases, depending on your needs. In high-volume environments,
 you may want to use a database that is optimized for high throughput, such as [Badger](https://dgraph.io/docs/badger).
@@ -60,7 +60,7 @@ The Bitcoin nodes can be configured in the settings file.
 Metamorph is talking to the Bitcoin nodes over the p2p network. If metamorph sends invalid transactions to the
 Bitcoin node, it will be **banned** by that node. Either make sure not to send invalid or double spend transactions through metamorph, or make sure that all metamorph servers are **whitelisted** on the Bitcoin nodes they are connecting to.
 
-## Hand on lab
+<!-- ## Hands on lab
 
 ### Command line
 
@@ -82,7 +82,7 @@ The only difference between the two is that the generic `main.go` starts the Go 
 ### Using docker
 
 
-In this repository you can find Dockerfile and docker-compose to run metamorph and it needs as docker containers.
+In this repository you can find Dockerfile and docker-compose to run metamorph and it needs as docker containers. -->
 
 
 

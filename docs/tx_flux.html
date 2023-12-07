@@ -175,7 +175,7 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Transactions</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="tx_standard_vs_extended.html">Transaction flux</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx_standard_vs_extended.html">Transaction formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tx_extended.html">Extended format</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Transaction lifecycle</a></li>
 </ul>
@@ -341,7 +341,7 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="transaction-lifecycle">
 <span id="lifecycle"></span><h1>Transaction lifecycle<a class="headerlink" href="#transaction-lifecycle" title="Permalink to this headline">#</a></h1>
 <p>The ARC architecture has been designed to assist in the management of the transaction lifecycle, enabling better tracking of the status of each transaction, reissuing transactions until they are seen by the network and notifying the issuer of relevant status changes. This ARC feature allows clients and bitcoin wallets to be lighter and more efficient in their mission.</p>
-<p><img alt="Transaction lifecycle." src="_images/uml_lifecycle.png" /></p>
+<p><img alt="Transaction lifecycle." src="_images/transaction_lifecycle.png" /></p>
 <p>ARC is a transaction processor for Bitcoin that keeps track of the life cycle of a transaction as it is processed by
 the Bitcoin network. Next to the mining status of a transaction, ARC also keeps track of the various states that a
 transaction can be in, such as <code class="docutils literal notranslate"><span class="pre">ANNOUNCED_TO_NETWORK</span></code>, <code class="docutils literal notranslate"><span class="pre">SEEN_IN_ORPHAN_MEMPOOL</span></code>, <code class="docutils literal notranslate"><span class="pre">SENT_TO_NETWORK</span></code>, <code class="docutils literal notranslate"><span class="pre">SEEN_ON_NETWORK</span></code>, <code class="docutils literal notranslate"><span class="pre">MINED</span></code>, <code class="docutils literal notranslate"><span class="pre">REJECTED</span></code>, etc.</p>

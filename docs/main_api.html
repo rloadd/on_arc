@@ -175,7 +175,7 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Transactions</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="tx_standard_vs_extended.html">Transaction flux</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx_standard_vs_extended.html">Transaction formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tx_extended.html">Extended format</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tx_flux.html">Transaction lifecycle</a></li>
 </ul>
@@ -352,10 +352,11 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="api">
 <h1>API<a class="headerlink" href="#api" title="Permalink to this headline">#</a></h1>
-<p>API is the REST API microservice for interacting with ARC. See the <span class="xref myst">API documentation</span> for more information.</p>
+<p>API is the REST API microservice for interacting with ARC. See the <a class="reference external" href="https://bitcoin-sv.github.io/arc/api.html">API documentation</a> for more information.</p>
 <p>The API takes care of authentication, validation, and sending transactions to Metamorph.  The API talks to one or more Metamorph instances using client-based, round robin load balancing.</p>
 <section id="authorization">
 <h2>Authorization<a class="headerlink" href="#authorization" title="Permalink to this headline">#</a></h2>
+<p>[..]</p>
 </section>
 <section id="validation">
 <h2>Validation<a class="headerlink" href="#validation" title="Permalink to this headline">#</a></h2>
@@ -397,11 +398,11 @@ document.write(`
 </tr>
 </tbody>
 </table>
-<p>This curl example show how can be set the callback url ARC must notify events back to the client app.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> 
-</pre></div>
-</div>
-</section>
+<!-- This curl example shows how can be set the callback url ARC must notify events back to the client app.
+
+```
+curl 
+``` --></section>
 </section>
 
     <script type="text/x-thebe-config">
