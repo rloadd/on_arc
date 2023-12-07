@@ -1,11 +1,37 @@
 
 
+# Important
 
-# Testing
+THIS IS NOT AUTHORITATIVE DOCUMENTATION ON ARC PROJECT OF Bitcoin SV.
+The authoritative documentation can be found at:
+
+  * https://bitcoin-sv.github.io/arc/
+  * https://github.com/bitcoin-sv/arc
+  * https://www.bsvblockchain.org/features/arc
+  
+
+This repo contains tips and hints to start up and test the ARC infrastructure while developers are building it. Following recipes built artifacts strictly based on the content of the official repo https://bitcoin-sv.github.io/arc/ and isolated in docker containers. PLEASE, TAKE CARE AS THE CODE OF ARC IS BEING UPDATED IN REAL TIME AND COULD BE INMATURE IN SOME PARTS.
+
+
+## Mission: improve documentation
+
+First, I am doing this work from my own understanding by reading the source code and jumping around the published ARC documentation. The intent is to summarize, but ARC I don't know if it's going to be a short or long summary. ARC is a large project with an ambitious design for scaling based on microservices, intended for the cloud, benefiting from other mature software projects for bitcoin, with test integration in the continuous deployment cycle, with several dimensions of observability, etc.. 
+
+Second, the ARC is being deployed right now (December 2023). Some details or malfunctions could change as they are told, so some claims or the depth of claims should slowly be filled in.
+
+Lastly, this repo is a best effort project. Sorry for the imprecissions, inconveniences if some misunderstanding occurs and if my pace of my update is sloooooow. Official sources are listed above.
+
+
+At https://rloadd.github.io/on_arc/ (this repo) I am unifying ARC documentation and extending some parts that can accelerate the undertanding for those that want to deploy it own instance of ARC. Following sections of this README are a shortcut to run ARC for test porpouses and will be finally also included in github pages.
+
+
+## Testing
+
+ Why do the tests appear first ? That's where I would start. Surely to create it you have to see it started, recognize the ARC components and see where the transactions evolve. By taking the tests provided in the official repo and stitching them with other ideas we can test it at home.
 
 ## Regular tests
 
-The core of the tests are that included in the main repo or ARC. Image container are build cloning the repo and making get ready the executable in a row. Nothing has to be installed or compiled separatedly except, obviously the docker environment and tools.
+The core of the tests are that included in the main repo or ARC. Docker will build the image cloning the repo and making get ready the executable in a row. Nothing has to be installed or compiled separatedly except, obviously the docker environment and tools.
 
 This directory provides a config.yaml and the rest of the config files aligned with the docker-compose files provided.
 

@@ -1,5 +1,0 @@
-# Tracing with Jaeger
-
-
-sdasda
-
