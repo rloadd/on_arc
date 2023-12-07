@@ -40,6 +40,9 @@ A little hack with docker-compose let us to run multiple instances of API and Me
 docker-compose -f docker-compose-decoupled-lb.yml up
 ```
 
+
+Several containers are launched for some services.
+
 ```
 $ docker ps
 CONTAINER ID   IMAGE                         COMMAND                  CREATED         STATUS                   PORTS                                                                                                                                   NAMES
@@ -115,8 +118,9 @@ $ docker exec -it arc-db bash
 
 Connection to the data base
 
+```
 # psql -h localhost -U arcuser blocktx
-
+```
 
 List of tables
 ```
@@ -155,6 +159,9 @@ blocktx=# \dt+ transactions
 
 
 ```
-curl --user 'bitcoin:bitcoin' --data-binary '{"jsonrpc":"1.0","id":"curltext","method":"getinfo","params":[]}' -H 'content-type:text/plain;' http://127.0.0.1:18332
+curl --user 'bitcoin:bitcoin'   \
+    --data-binary '{"jsonrpc":"1.0","id":"curltext","method":"getinfo","params":[]}' \
+    -H 'content-type:text/plain;' \
+    http://127.0.0.1:18332
 
 ```
