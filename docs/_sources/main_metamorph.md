@@ -11,8 +11,7 @@ transaction store. As a result, the metamorphs do not communicate with each othe
 
 ## Metamorph stores
 
-As an independent service, metamorph has its own database separate from the rest of the ARC services. Metamorph store has been implemented for multiple databases, depending on your needs. In high-volume environments,
-you may want to use a database that is optimized for high throughput, such as [Badger](https://dgraph.io/docs/badger).
+As an independent service, metamorph can have its own database separate from the rest of the ARC services. Metamorph store has been implemented for multiple databases, depending on your needs. In high-volume environments, you may want to use a database that is optimized for high throughput, such as [Badger](https://dgraph.io/docs/badger).
 
 The following databases have been implemented:
 

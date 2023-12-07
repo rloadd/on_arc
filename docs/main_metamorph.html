@@ -181,6 +181,7 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Usage</span></p>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="config_file.html">Config.yaml</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cmd.html">Command line</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Observability</span></p>
@@ -360,8 +361,7 @@ seconds by default).</p>
 transaction store. As a result, the metamorphs do not communicate with each other and remain unaware of each other’s existence.</p>
 <section id="metamorph-stores">
 <h2>Metamorph stores<a class="headerlink" href="#metamorph-stores" title="Permalink to this headline">#</a></h2>
-<p>As an independent service, metamorph has its own database separate from the rest of the ARC services. Metamorph store has been implemented for multiple databases, depending on your needs. In high-volume environments,
-you may want to use a database that is optimized for high throughput, such as <a class="reference external" href="https://dgraph.io/docs/badger">Badger</a>.</p>
+<p>As an independent service, metamorph can have its own database separate from the rest of the ARC services. Metamorph store has been implemented for multiple databases, depending on your needs. In high-volume environments, you may want to use a database that is optimized for high throughput, such as <a class="reference external" href="https://dgraph.io/docs/badger">Badger</a>.</p>
 <p>The following databases have been implemented:</p>
 <ul class="simple">
 <li><p>Sqlite3 (<code class="docutils literal notranslate"><span class="pre">sqlite</span></code> or <code class="docutils literal notranslate"><span class="pre">sqlite_memory</span></code> for in-memory)</p></li>
