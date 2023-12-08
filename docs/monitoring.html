@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Transaction lifecycle &#8212; ARC Documentation</title>
+    <title>Monitoring &#8212; Non-official doc</title>
   
   
   
@@ -77,11 +77,11 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'tx_flux';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'monitoring';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Config.yaml" href="config_file.html" />
-    <link rel="prev" title="Extended format" href="tx_extended.html" />
+    <link rel="next" title="API response" href="api_response.html" />
+    <link rel="prev" title="Tracing" href="tracing.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="None"/>
   </head>
@@ -153,7 +153,7 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
-    <p class="title logo__title">ARC Documentation</p>
+    <p class="title logo__title">Non-official doc</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -174,10 +174,10 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="main_callbacker.html">Callbacker</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Transactions</span></p>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="tx_standard_vs_extended.html">Transaction formats</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tx_extended.html">Extended format</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Transaction lifecycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx_extended.html">Extended format efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx_lifecycle.html">Transaction lifecycle</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Usage</span></p>
 <ul class="nav bd-sidenav">
@@ -185,8 +185,9 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="cmd.html">Command line</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Observability</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing with Jaeger</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Monitoring</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Outputs</span></p>
 <ul class="nav bd-sidenav">
@@ -245,7 +246,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="_sources/tx_flux.md" target="_blank"
+      <li><a href="_sources/monitoring.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Descargar archivo fuente"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -314,7 +315,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -325,11 +328,19 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Transaction lifecycle</h1>
+    <h1>Monitoring</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#enabling-monitoring">Enabling monitoring</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -339,21 +350,39 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="transaction-lifecycle">
-<span id="lifecycle"></span><h1>Transaction lifecycle<a class="headerlink" href="#transaction-lifecycle" title="Permalink to this headline">#</a></h1>
-<p>The ARC architecture has been designed to assist in the management of the transaction lifecycle, enabling better tracking of the status of each transaction, reissuing transactions until they are seen by the network and notifying the issuer of relevant status changes. This ARC feature allows clients and bitcoin wallets to be lighter and more efficient in their mission.</p>
-<p><img alt="Transaction lifecycle." src="_images/transaction_lifecycle.png" /></p>
-<p>ARC is a transaction processor for Bitcoin that keeps track of the life cycle of a transaction as it is processed by
-the Bitcoin network. Next to the mining status of a transaction, ARC also keeps track of the various states that a
-transaction can be in, such as <code class="docutils literal notranslate"><span class="pre">ANNOUNCED_TO_NETWORK</span></code>, <code class="docutils literal notranslate"><span class="pre">SEEN_IN_ORPHAN_MEMPOOL</span></code>, <code class="docutils literal notranslate"><span class="pre">SENT_TO_NETWORK</span></code>, <code class="docutils literal notranslate"><span class="pre">SEEN_ON_NETWORK</span></code>, <code class="docutils literal notranslate"><span class="pre">MINED</span></code>, <code class="docutils literal notranslate"><span class="pre">REJECTED</span></code>, etc.</p>
-<p>If a transaction is not <code class="docutils literal notranslate"><span class="pre">SEEN_ON_NETWORK</span></code> within a certain time period (60 seconds by default), ARC will re-send the
-transaction to the Bitcoin network. ARC also monitors the Bitcoin network for transaction and block messages, and
-will notify the client when a transaction has been mined, or rejected.</p>
-<p>Unlike other transaction processors, ARC broadcasts all transactions on the p2p network, and does not rely on the rpc
-interface of a Bitcoin node. This makes it possible for ARC to connect and broadcast to any number of nodes, as many
-as are desired. In the future, ARC will be also able to send transactions using ipv6 multicast, which will make it
-possible to connect to a large number of nodes without incurring large bandwidth costs.</p>
-<p>All the microservices are designed to be horizontally scalable, and can be deployed on a single machine or on multiple machines. Each one has been programmed with a store interface and various databases can be used to store data. The default store is sqlite3, but any database that implements the store interface can be used.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="monitoring">
+<h1>Monitoring<a class="headerlink" href="#monitoring" title="Permalink to this headline">#</a></h1>
+<p>Prometheus can collect ARC metrics. It improves observability in production and enables debugging during development and deployment. As Prometheus is a very standard tool for monitoring, any other complementary tool such as Grafana and others can be added for better data analysis.</p>
+<p>Prometheus periodically poll the system data by querying specific urls.</p>
+<section id="enabling-monitoring">
+<h2>Enabling monitoring<a class="headerlink" href="#enabling-monitoring" title="Permalink to this headline">#</a></h2>
+<p>Enable monitoring consists of setting the **prometheusEndpoint” property in config.yaml file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">profilerAddr</span><span class="p">:</span> <span class="mf">0.0.0.0</span><span class="p">:</span><span class="mi">9999</span> <span class="c1"># address to start profiler server on</span>
+<span class="n">prometheusEndpoint</span><span class="p">:</span> <span class="o">/</span><span class="n">metrics</span> <span class="c1"># endpoint for prometheus metrics</span>
+
+</pre></div>
+</div>
+<p>The full url for the Prometheus endpoint also uses the “profileAddr” property. In this example, the URL is <a class="reference external" href="http://0.0.0.0:9999/metrics">http://0.0.0.0:9999/metrics</a>.</p>
+<p>Monitoring data are as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># HELP arc_blocktx_peer_block_announcement_count Shows the number of blocks announced by the peer handler</span>
+<span class="c1"># TYPE arc_blocktx_peer_block_announcement_count counter</span>
+<span class="n">arc_blocktx_peer_block_announcement_count</span><span class="p">{</span><span class="n">peer</span><span class="o">=</span><span class="s2">&quot;node1:18333&quot;</span><span class="p">}</span> <span class="mi">268</span>
+<span class="n">arc_blocktx_peer_block_announcement_count</span><span class="p">{</span><span class="n">peer</span><span class="o">=</span><span class="s2">&quot;node2:18333&quot;</span><span class="p">}</span> <span class="mi">321</span>
+<span class="n">arc_blocktx_peer_block_announcement_count</span><span class="p">{</span><span class="n">peer</span><span class="o">=</span><span class="s2">&quot;node3:18333&quot;</span><span class="p">}</span> <span class="mi">344</span>
+<span class="c1"># HELP arc_blocktx_peer_block_count Shows the number of blocks received by the peer handler</span>
+<span class="c1"># TYPE arc_blocktx_peer_block_count counter</span>
+<span class="n">arc_blocktx_peer_block_count</span><span class="p">{</span><span class="n">peer</span><span class="o">=</span><span class="s2">&quot;node1:18333&quot;</span><span class="p">}</span> <span class="mi">155</span>
+<span class="n">arc_blocktx_peer_block_count</span><span class="p">{</span><span class="n">peer</span><span class="o">=</span><span class="s2">&quot;node2:18333&quot;</span><span class="p">}</span> <span class="mi">170</span>
+<span class="n">arc_blocktx_peer_block_count</span><span class="p">{</span><span class="n">peer</span><span class="o">=</span><span class="s2">&quot;node3:18333&quot;</span><span class="p">}</span> <span class="mi">192</span>
+<span class="c1"># HELP arc_blocktx_peer_block_processing_ms Shows the total time spent processing blocks by the peer handler</span>
+<span class="c1"># TYPE arc_blocktx_peer_block_processing_ms counter</span>
+<span class="n">arc_blocktx_peer_block_processing_ms</span><span class="p">{</span><span class="n">peer</span><span class="o">=</span><span class="s2">&quot;node1:18333&quot;</span><span class="p">}</span> <span class="mi">2907</span>
+<span class="n">arc_blocktx_peer_block_processing_ms</span><span class="p">{</span><span class="n">peer</span><span class="o">=</span><span class="s2">&quot;node2:18333&quot;</span><span class="p">}</span> <span class="mi">2745</span>
+<span class="n">arc_blocktx_peer_block_processing_ms</span><span class="p">{</span><span class="n">peer</span><span class="o">=</span><span class="s2">&quot;node3:18333&quot;</span><span class="p">}</span> <span class="mi">3041</span>
+<span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -388,20 +417,20 @@ possible to connect to a large number of nodes without incurring large bandwidth
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="tx_extended.html"
+       href="tracing.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Extended format</p>
+        <p class="prev-next-title">Tracing</p>
       </div>
     </a>
     <a class="right-next"
-       href="config_file.html"
+       href="api_response.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Config.yaml</p>
+        <p class="prev-next-title">API response</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -414,6 +443,20 @@ possible to connect to a large number of nodes without incurring large bandwidth
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#enabling-monitoring">Enabling monitoring</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

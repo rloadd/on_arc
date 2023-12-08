@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Config.yaml &#8212; ARC Documentation</title>
+    <title>Config.yaml &#8212; Non-official doc</title>
   
   
   
@@ -81,7 +81,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Command line" href="cmd.html" />
-    <link rel="prev" title="Transaction lifecycle" href="tx_flux.html" />
+    <link rel="prev" title="Transaction lifecycle" href="tx_lifecycle.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="None"/>
   </head>
@@ -153,7 +153,7 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
-    <p class="title logo__title">ARC Documentation</p>
+    <p class="title logo__title">Non-official doc</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -176,8 +176,8 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Transactions</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="tx_standard_vs_extended.html">Transaction formats</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tx_extended.html">Extended format</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tx_flux.html">Transaction lifecycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx_extended.html">Extended format efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx_lifecycle.html">Transaction lifecycle</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Usage</span></p>
 <ul class="current nav bd-sidenav">
@@ -186,7 +186,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Observability</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing with Jaeger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="monitoring.html">Monitoring</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Outputs</span></p>
 <ul class="nav bd-sidenav">
@@ -469,12 +470,12 @@ document.write(`
 
 </pre></div>
 </div>
-<p>We underline:</p>
+<p>Highlights:</p>
 <ul class="simple">
 <li><p>There exists a level 0 section for each ARC main component and also to describe the bitcoin network to be used.</p></li>
 <li><p>The most “listenAddr” (where to listen to) inputs have also a correspondant “dialAddr” input (how other components can reach to connect / dial to this one).</p></li>
 <li><p>Customizing network endpoints is one source of flexibility to modify how the microservices are deployed.</p></li>
-<li><p>Observability with stats, prometheus and jaeger supported by default.</p></li>
+<li><p>3-dimensional observability with stats (metrics), prometheus (audits) and tracing (jaeger) supported.</p></li>
 <li><p>Database engine can be shared if needed by blocktx and metamorph by the mean of configure the access.</p></li>
 <li><p>Some common parameters are also needed.</p></li>
 </ul>
@@ -513,7 +514,7 @@ document.write(`
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="tx_flux.html"
+       href="tx_lifecycle.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">

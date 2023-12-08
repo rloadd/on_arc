@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Tracing with Jaeger &#8212; ARC Documentation</title>
+    <title>Tracing &#8212; Non-official doc</title>
   
   
   
@@ -80,7 +80,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'tracing';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="API response" href="api_response.html" />
+    <link rel="next" title="Monitoring" href="monitoring.html" />
     <link rel="prev" title="Command line" href="cmd.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="None"/>
@@ -153,7 +153,7 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
-    <p class="title logo__title">ARC Documentation</p>
+    <p class="title logo__title">Non-official doc</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -176,8 +176,8 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Transactions</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="tx_standard_vs_extended.html">Transaction formats</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tx_extended.html">Extended format</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tx_flux.html">Transaction lifecycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx_extended.html">Extended format efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx_lifecycle.html">Transaction lifecycle</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Usage</span></p>
 <ul class="nav bd-sidenav">
@@ -186,7 +186,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Observability</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Tracing with Jaeger</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Tracing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="monitoring.html">Monitoring</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Outputs</span></p>
 <ul class="nav bd-sidenav">
@@ -314,7 +315,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -325,11 +328,19 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Tracing with Jaeger</h1>
+    <h1>Tracing</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jaeger">Jaeger</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -339,9 +350,37 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="tracing-with-jaeger">
-<h1>Tracing with Jaeger<a class="headerlink" href="#tracing-with-jaeger" title="Permalink to this headline">#</a></h1>
-<p>...</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="tracing">
+<h1>Tracing<a class="headerlink" href="#tracing" title="Permalink to this headline">#</a></h1>
+<p>Tracing can be enabled using flags (-tracer=true) or setting up the config.yaml file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<span class="n">tracing</span><span class="p">:</span> <span class="n">true</span> <span class="c1"># enable trancing</span>
+<span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<section id="jaeger">
+<h2>Jaeger<a class="headerlink" href="#jaeger" title="Permalink to this headline">#</a></h2>
+<p>Events are spanned to <a class="reference external" href="https://www.jaegertracing.io/">Jaeger</a>.</p>
+<!-- As a reminderm, defaults ports in jaeger:
+
+
+| Port	| Protocol	| Component	| Function |
+| -----| -----| -----| -----|
+|6831 |UDP	    |agent	|accept jaeger.thrift over Thrift-compact protocol (used by most SDKs)|
+|6832	|UDP	|agent	|accept jaeger.thrift over Thrift-binary protocol (used by Node.js SDK)|
+|5778	|HTTP	|agent	|serve configs (sampling, etc.)|
+|16686	|HTTP	|query	|serve frontend|
+|4317	|HTTP	|collector	|accept OpenTelemetry Protocol (OTLP) over gRPC|
+|4318	|HTTP	|collector	|accept OpenTelemetry Protocol (OTLP) over HTTP|
+|14268	|HTTP	|collector	|accept jaeger.thrift directly from clients|
+|14250	|HTTP	|collector	|accept model.proto|
+|9411	|HTTP	|collector	|Zipkin compatible endpoint (optional)| -->
+<p>Jaeger can run as a docker container.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">run</span>  <span class="o">-</span><span class="n">p</span> <span class="mi">16686</span><span class="p">:</span><span class="mi">16686</span> <span class="o">-</span><span class="n">p</span> <span class="mi">4317</span><span class="p">:</span><span class="mi">4317</span> <span class="o">-</span><span class="n">p</span> <span class="mi">14269</span><span class="p">:</span><span class="mi">14269</span> <span class="n">jaegertracing</span><span class="o">/</span><span class="nb">all</span><span class="o">-</span><span class="ow">in</span><span class="o">-</span><span class="n">one</span><span class="p">:</span><span class="n">latest</span>
+</pre></div>
+</div>
+<p>Jaeger frontend let analyze the traces. By default, Jaeger URL in a local env is <a class="reference external" href="http://localhost:16686/search">http://localhost:16686/search</a>.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -385,11 +424,11 @@ document.write(`
       </div>
     </a>
     <a class="right-next"
-       href="api_response.html"
+       href="monitoring.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">API response</p>
+        <p class="prev-next-title">Monitoring</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -402,6 +441,20 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jaeger">Jaeger</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

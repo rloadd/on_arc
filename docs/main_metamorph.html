@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Metamorph &#8212; ARC Documentation</title>
+    <title>Metamorph &#8212; Non-official doc</title>
   
   
   
@@ -153,7 +153,7 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
-    <p class="title logo__title">ARC Documentation</p>
+    <p class="title logo__title">Non-official doc</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -176,8 +176,8 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Transactions</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="tx_standard_vs_extended.html">Transaction formats</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tx_extended.html">Extended format</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tx_flux.html">Transaction lifecycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx_extended.html">Extended format efficiency</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tx_lifecycle.html">Transaction lifecycle</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Usage</span></p>
 <ul class="nav bd-sidenav">
@@ -186,7 +186,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Observability</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing with Jaeger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tracing.html">Tracing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="monitoring.html">Monitoring</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Outputs</span></p>
 <ul class="nav bd-sidenav">
@@ -339,7 +340,7 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metamorph-stores">Metamorph stores</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metamorph-transaction-statuses">Metamorph transaction statuses</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connections-to-bitcoin-nodes">Connections to Bitcoin nodes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connection-to-the-bitcoin-netowrk">Connection to the Bitcoin netowrk</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whitelisting">Whitelisting</a></li>
 </ul>
             </nav>
@@ -439,11 +440,12 @@ available:</p>
 </tbody>
 </table>
 <p>This status is returned in the <code class="docutils literal notranslate"><span class="pre">txStatus</span></code> field whenever the transaction is queried.</p>
+<p>A <a class="reference internal" href="tx_lifecycle.html"><span class="doc std std-doc">transaction lifecycle graph</span></a> is available in this documentation .</p>
 </section>
-<section id="connections-to-bitcoin-nodes">
-<h2>Connections to Bitcoin nodes<a class="headerlink" href="#connections-to-bitcoin-nodes" title="Permalink to this headline">#</a></h2>
+<section id="connection-to-the-bitcoin-netowrk">
+<h2>Connection to the Bitcoin netowrk<a class="headerlink" href="#connection-to-the-bitcoin-netowrk" title="Permalink to this headline">#</a></h2>
 <p>Metamorph can connect to multiple Bitcoin nodes, and will use a subset of the nodes to send transactions to. The other
-nodes will be used to listen for transaction INV message, which will trigger the SEEN_ON_NETWORK status of a transaction.</p>
+nodes will be used to listen for transaction <strong>INV</strong> message, which will trigger the SEEN_ON_NETWORK status of a transaction.</p>
 <p>The Bitcoin nodes can be configured in the settings file.</p>
 </section>
 <section id="whitelisting">
@@ -545,7 +547,7 @@ In this repository you can find Dockerfile and docker-compose to run metamorph a
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metamorph-stores">Metamorph stores</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metamorph-transaction-statuses">Metamorph transaction statuses</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connections-to-bitcoin-nodes">Connections to Bitcoin nodes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connection-to-the-bitcoin-netowrk">Connection to the Bitcoin netowrk</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#whitelisting">Whitelisting</a></li>
 </ul>
   </nav></div>

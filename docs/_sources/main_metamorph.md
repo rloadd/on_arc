@@ -47,10 +47,13 @@ available:
 This status is returned in the `txStatus` field whenever the transaction is queried.
 
 
-## Connections to Bitcoin nodes
+A [transaction lifecycle graph](tx_lifecycle) is available in this documentation .
+
+
+## Connection to the Bitcoin netowrk
 
 Metamorph can connect to multiple Bitcoin nodes, and will use a subset of the nodes to send transactions to. The other
-nodes will be used to listen for transaction INV message, which will trigger the SEEN_ON_NETWORK status of a transaction.
+nodes will be used to listen for transaction **INV** message, which will trigger the SEEN_ON_NETWORK status of a transaction.
 
 The Bitcoin nodes can be configured in the settings file.
 

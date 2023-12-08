@@ -1,6 +1,6 @@
 # Config.yaml
 
-Just one file can be used to configure all the microservices. More precisely, some settings are ignored by some components of ARC and some others are shared or related to. Becouse of that can make sense to try to have a single one coherent with the full design of our deployment.
+One file can be used to configure all the microservices. More precisely, some settings are ignored by some components of ARC and some others are shared or related to. Becouse of that can make sense to try to have a single one coherent with the full design of our deployment.
 
 The most of the facilities provided in the official ARC repo let the user to use a flag to point the directory where the file is although the default predefined locations.
 
@@ -125,11 +125,12 @@ api:
 
 ```
 
-We underline:
+Highlights:
+
   * There exists a level 0 section for each ARC main component and also to describe the bitcoin network to be used.
   * The most "listenAddr" (where to listen to) inputs have also a correspondant "dialAddr" input (how other components can reach to connect / dial to this one).
   * Customizing network endpoints is one source of flexibility to modify how the microservices are deployed.
-  * Observability with stats, prometheus and jaeger supported by default.
+  * 3-dimensional observability with stats (metrics), prometheus (audits) and tracing (jaeger) supported.
   * Database engine can be shared if needed by blocktx and metamorph by the mean of configure the access.
   * Some common parameters are also needed.
   
