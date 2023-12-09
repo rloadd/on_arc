@@ -2,41 +2,62 @@
 
 # Important
 
-THIS IS NOT AUTHORITATIVE DOCUMENTATION ON ARC PROJECT OF Bitcoin SV.
-The authoritative documentation can be found at:
+THIS IS NOT OFFICIAL DOCUMENTATION ON THE Bitcoin SV ARC PROJECT. Authoritative documentation can be found at:
 
   * https://bitcoin-sv.github.io/arc/
   * https://github.com/bitcoin-sv/arc
   * https://www.bsvblockchain.org/features/arc
   
 
-This repo contains tips and hints to start up and test the ARC infrastructure while developers are building it. Following recipes built artifacts strictly based on the content of the official repo https://bitcoin-sv.github.io/arc/ and isolated in docker containers. PLEASE, TAKE CARE AS THE CODE OF ARC IS BEING UPDATED IN REAL TIME AND COULD BE INMATURE IN SOME PARTS.
+This repo contains tips and suggestions for getting up and running and testing ARC infrastructure while developers are building it. The following recipes build artifacts strictly based on the content of the official https://bitcoin-sv.github.io/arc/ repo isolated in docker containers. PLEASE BE CAREFUL AS THE ARC CODE IS BEING UPDATED IN REAL TIME AND MAY BE IMMATURE IN SOME PARTS.
+
+## What is ARC
+
+ARC is an ambitious cloud-native open source project sponsored by the Bitcoin Association to be the interface to the Bitcoin SV network.
+
+ARC is a large project pursuing an ambitious goal of performance in transactions per second. From a software project point of view, it is based on microservices designed to scale independently, native cloud technologies, performance-enhancing storage and data structures, continuous integration of the code lifecycle, testing and code quality, various dimensions of observability, etc.
+
+From the functionality point of view it is basically a transaction processor that implements a state machine for these transactions, which interacts with the network managing synchronous and asynchronous to achieve the best performance and offer the possibility to simplify third party applications.
 
 
 ## Mission: improve documentation
 
-First, I am doing this work from my own understanding by reading the source code and jumping around the published ARC documentation. The intent is to summarize, but ARC I don't know if it's going to be a short or long summary. ARC is a large project with an ambitious design for scaling based on microservices, intended for the cloud, benefiting from other mature software projects for bitcoin, with test integration in the continuous deployment cycle, with several dimensions of observability, etc.. 
+First, this work starts with understanding ARC itself. For this we have directly read the source code uploaded to github and visited the documentation published in the different websites of the BSV ecosystem. 
 
-Second, the ARC is being deployed right now (December 2023). Some details or malfunctions could change as they are told, so some claims or the depth of claims should slowly be filled in.
+Second, the ARC is being deployed right now (December 2023). Some details or dysfunctions might change as they are counted, so some claims or depth of claims need to be filled in slowly.
 
-Lastly, this repo is a best effort project. Sorry for the imprecissions, inconveniences if some misunderstanding occurs and if my pace of my update is sloooooow. Official sources are listed above.
+Finally, this repo is a best effort project. Apologies for any inaccuracies, inconvenience if any misunderstandings occur, and apologies if my update pace is muuuuuch slower. Official sources are listed above.
 
-
-At https://rloadd.github.io/on_arc/ (this repo) I am unifying ARC documentation and extending some parts that can accelerate the undertanding for those that want to deploy it own instance of ARC. Following sections of this README are a shortcut to run ARC for test porpouses and will be finally also included in github pages.
+At https://rloadd.github.io/on_arc/ (this repo) we are unifying the ARC documentation and expanding some parts that can speed up the understanding for those who want to deploy their own ARC instance. The following sections of this README are a shortcut to running ARC for testing purposes and will eventually be included in the attached github pages as well.
 
 
 ## Testing
 
- Why do the tests appear first ? That's where I would start. Surely to create it you have to see it started, recognize the ARC components and see where the transactions evolve. By taking the tests provided in the official repo and stitching them with other ideas we can test it at home.
+Why does the tests appear first? That's where I would start. Surely to believe that ARC works you have to be able to run, recognize microservices and see how transactions evolve. By taking the tests provided in the official repo and stitching them together with other ideas we can test it a toy deployment at home.
 
-## Regular tests
+### Makefile test 
 
-The core tests are the ones included in the main repo or ARC. Docker will build the image by cloning the repo and preparing the executable at once. Nothing has to be cloned, installed or compiled separately, except, obviously, the Docker environment and tools.
+There is a makefile that allows you to build the project artifacts. It also gives us a first way to test ARC.
 
-This directory provides a config.yaml and the rest of the config files aligned with the docker-compose files provided.
+```
+git clone https://github.com/bitcoin-sv/arc
+cd arc
+make clean_restart_e2e_test
+
+```
+
+It is designed to stop everything when the test is over. For this reason we have other options that allow us to keep ARC up and continue testing.
 
 
-### Simplest infrastructure
+### Custom tests
+
+The main tests are the ones included in the main repository of ARC. Using it as the basis, we have create other ways to test ARC.
+
+In this custom tests, docker images are built by cloning the repo, compiling and staging. Nothing has to be cloned, installed or compiled separately, except, obviously, the Docker environment and tools.
+
+This repo provides a config.yaml and the rest of the configuration files aligned with the provided docker-compose files.
+
+#### Simplest infrastructure
 
 Each service in its own separated container. Just one container by service.
 
@@ -58,7 +79,7 @@ e2e9e4e1ec42   bitcoinsv/bitcoin-sv:1.0.15   "/entrypoint.sh /ent…"   2 hours 
 
 ```
 
-### Balanced microservices
+#### Balanced microservices
 
 A little hack with docker-compose let us to run multiple instances of API and Metamorph services. Nginx do the magic.
 
@@ -106,7 +127,7 @@ e2e9e4e1ec42   bitcoinsv/bitcoin-sv:1.0.15   "/entrypoint.sh /ent…"   2 hours 
 ```
 
 
-## Batching transactions
+### Batching transactions
 
 It is possible to perform batch transactions to test the deployment. The "cmd" utilities are useful for doing speficic and isolated operations with ARC. In this case we can use "broadcaster" to order transactions through ARC.
 
@@ -119,7 +140,7 @@ go run cmd/broadcaster/main.go -api=true -consolidate -authorization=mainnet_XXX
 ```
 
 
-NOTE2: broadcaster in "cmd" fashion doesn't support option "-config". I've done by my own to launch the same more confortable:
+NOTE2: broadcaster in "cmd" fashion doesn't support any option "-config". I've done by my own to launch the same more confortable (hopefully it can be added to the official repo):
 
 ```
 go run cmd/broadcaster/main.go -config=../arc_cover/decoupled/ -api=true -consolidate -authorization=mainnet_XXX -batch=100 1000
@@ -129,7 +150,7 @@ go run cmd/broadcaster/main.go -config=../arc_cover/decoupled/ -api=true -consol
 
 ## Dummy third app
 
-It could be interesting to receive those "post" that the callbacker sends back to the customer application, even if they are corresponding to a tests like the mentioned above. For that reason, we have included a dummy callback receiver that logs any POST sent back to 0.0.0.0:9000 from ARC.
+It could be interesting to receive those "post" that the callbacker sends back to the customer application, even if they are corresponding to a tests (previous section). For that reason, we have included a dummy callback receiver that logs to console any POST sent back to 0.0.0.0:9000 from ARC.
 
 Why 0.0.0.0:9000 ? Just because this endpoint is for now hardcoded and we are trying to test directly from uploaded branches.
 
