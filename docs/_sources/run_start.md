@@ -54,7 +54,7 @@ make startup
 Cleaning like this
 
 ```
-make startup
+make clean
 
 ```
 
