@@ -47,11 +47,16 @@ The perfect ARC deployment requires making many decisions about databases, netwo
 ```
 git clone https://github.com/rloadd/on_arc
 cd on_arc/monolithic
-docker-compose up 
+make startup
 
 ```
 
+Cleaning like this
 
+```
+make startup
+
+```
 
 
 

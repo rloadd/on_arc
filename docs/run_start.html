@@ -382,7 +382,12 @@ time=2023-12-01T17:30:47.879+01:00 level=INFO msg=&quot;Starting Callbacker&quot
 <p>The perfect ARC deployment requires making many decisions about databases, networking, interface with the bitcoin network, etc.. In this repo (<a class="github reference external" href="https://github.com/rloadd/on_arc">rloadd/on_arc</a>) we provide some examples on how to run everything in a toy deployment. Do your own research on the repo content and if you feel safe, try it like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">rloadd</span><span class="o">/</span><span class="n">on_arc</span>
 <span class="n">cd</span> <span class="n">on_arc</span><span class="o">/</span><span class="n">monolithic</span>
-<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span> 
+<span class="n">make</span> <span class="n">startup</span>
+
+</pre></div>
+</div>
+<p>Cleaning like this</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">startup</span>
 
 </pre></div>
 </div>
