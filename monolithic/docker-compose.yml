@@ -12,7 +12,7 @@ services:
     healthcheck:
       test: [ "CMD", "/entrypoint.sh", "bitcoin-cli", "getinfo" ]
     volumes:
-      - node1-data:/data
+      - arc_node1-data:/data
       - ./bitcoin.conf:/data/bitcoin.conf
     command: [ "/entrypoint.sh", "bitcoind", "-connect=node2:18333", "-connect=node3:18333" ]
 
@@ -27,7 +27,7 @@ services:
     healthcheck:
       test: [ "CMD", "/entrypoint.sh", "bitcoin-cli", "getinfo" ]
     volumes:
-      - node2-data:/data
+      - arc_node2-data:/data
       - ./bitcoin.conf:/data/bitcoin.conf
     command: [ "/entrypoint.sh", "bitcoind", "-connect=node1:18333", "-connect=node3:18333" ]
 
@@ -42,7 +42,7 @@ services:
     healthcheck:
       test: [ "CMD", "/entrypoint.sh", "bitcoin-cli", "getinfo" ]
     volumes:
-      - node3-data:/data
+      - arc_node3-data:/data
       - ./bitcoin.conf:/data/bitcoin.conf
     command: [ "/entrypoint.sh", "bitcoind", "-connect=node1:18333", "-connect=node2:18333" ]
 
@@ -55,7 +55,7 @@ services:
     - POSTGRES_PASSWORD=arcpass
     - POSTGRES_DB=blocktx
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - arc_db-data:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -d blocktx -U arcuser" ]
       interval: 5s
@@ -88,16 +88,15 @@ services:
   arc:
     build:
       context: .
-      dockerfile: ../Dockerfile.arc
-    image: arc-image
+      dockerfile: ../Dockerfile.arc      
+    image: arc
     container_name: arc
     ports:
       - "8011:8011"
       - "9090:9090"
       - "9999:9999"
     volumes:
-      - arc-data:/data
-      - ./config.yaml:/service/config.yaml
+      - ./config.yaml:/app/arc/build/config.yaml
     depends_on:
       - node1
       - node2
@@ -106,21 +105,20 @@ services:
 
   tests:
     container_name: arc-tests
+    image: arc-tests
+
     build:
       dockerfile: ../Dockerfile.arc.test
       context: .
     depends_on:
       - arc
 
-
 volumes:
-  arc-data:
+  arc_node1-data:
     external: false
-  node1-data:
+  arc_node2-data:
     external: false
-  node2-data:
+  arc_node3-data:
     external: false
-  node3-data:
-    external: false
-  postgres-data:
+  arc_db-data:
     external: false

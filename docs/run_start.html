@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>ARC &#8212; Non-official doc</title>
+    <title>Starting ARC &#8212; Non-official doc</title>
   
   
   
@@ -77,10 +77,11 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'intro';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'run_start';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="API" href="main_api.html" />
+    <link rel="next" title="Testing ARC" href="run_testing.html" />
+    <link rel="prev" title="Command line" href="cmd.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="None"/>
   </head>
@@ -146,7 +147,7 @@ const thebe_selector_output = ".output, .cell_output"
         <div class="sidebar-primary-item">
   
 
-<a class="navbar-brand logo" href="#">
+<a class="navbar-brand logo" href="intro.html">
   
   
   
@@ -159,8 +160,8 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1 current active">
-                <a class="reference internal" href="#">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
                     ARC
                 </a>
             </li>
@@ -184,8 +185,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="cmd.html">Command line</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Run ARC</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="run_start.html">Starting ARC</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Starting ARC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="run_testing.html">Testing ARC</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Observability</span></p>
@@ -250,7 +251,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="_sources/intro.md" target="_blank"
+      <li><a href="_sources/run_start.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Descargar archivo fuente"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -330,7 +331,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>ARC</h1>
+    <h1>Starting ARC</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -344,29 +345,46 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="arc">
-<h1>ARC<a class="headerlink" href="#arc" title="Permalink to this headline">#</a></h1>
-<blockquote>
-<div><p>Transaction processor for Bitcoin</p>
-</div></blockquote>
-<p><strong>ARC</strong> is a multi-layer transaction processor for Bitcoin that dramatically increases the performance of Bitcoin nodes processing  transactions. ARC keeps track of the lifecycle of a transaction as it is processed by the Bitcoin network.</p>
-<p>Unlike other transaction processors, ARC broadcasts all transactions on the p2p network, and does not rely on the rpc
-interface of a single Bitcoin node. This makes it possible for ARC to connect and broadcast to any number of nodes, as many as are desired. In the future, ARC will be also able to send transactions using ipv6 multicast, which will make it
-possible to connect to a large number of nodes without incurring large bandwidth costs.</p>
-<p>The ARC design decouples the core functions of a transaction processor and encapsulates them as microservices with the ability to scale horizontally adaptively. Interaction between microservices is decoupled using asynchronous messaging where possible.</p>
-<p><img alt="Architecture" src="_images/arc_january_2023-v2.png" /></p>
-<p>ARC mainly consists of four microservices: <a class="reference internal" href="main_api.html"><span class="doc std std-doc">API</span></a>, <a class="reference internal" href="main_metamorph.html"><span class="doc std std-doc">Metamorph</span></a>, <a class="reference internal" href="main_blocktx.html"><span class="doc std std-doc">BlockTx</span></a> and <a class="reference internal" href="main_callbacker.html"><span class="doc std std-doc">Callbacker</span></a>, which are all described in this documentation.</p>
-<div class="toctree-wrapper compound">
+  <section class="tex2jax_ignore mathjax_ignore" id="starting-arc">
+<h1>Starting ARC<a class="headerlink" href="#starting-arc" title="Permalink to this headline">#</a></h1>
+<p>Let’s start at the beginning. Regardless of the database you are going to use, or blockchain you are targeting, etc… you need the program compiled and ready to run.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">bitcoin</span><span class="o">-</span><span class="n">sv</span><span class="o">/</span><span class="n">arc</span>
+<span class="n">cd</span> <span class="n">arc</span>
+<span class="n">make</span> <span class="n">build_release</span>
+</pre></div>
 </div>
-<div class="toctree-wrapper compound">
+<p>The resulting binary is at  ./build/arc_linux_amd64.</p>
+<p>A typical (naive) run of the main binary could look line this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> ./build/arc_linux_amd64 
+2023/12/01 17:30:47 WARN: No config file &#39;settings.conf&#39;
+2023/12/01 17:30:47 WARN: No local config file &#39;settings_local.conf&#39;
+time=2023-12-01T17:30:47.824+01:00 level=INFO msg=&quot;starting arc&quot; version=&quot;&quot; commit=&quot;&quot;
+time=2023-12-01T17:30:47.824+01:00 level=INFO msg=&quot;Starting prometheus&quot; endpoint=/metrics
+time=2023-12-01T17:30:47.824+01:00 level=INFO msg=&quot;Starting tracer&quot;
+time=2023-12-01T17:30:47.825+01:00 level=INFO msg=&quot;Starting profiler on http://localhost:9999/debug/pprof&quot;
+time=2023-12-01T17:30:47.825+01:00 level=INFO msg=&quot;No service selected, starting all&quot;
+time=2023-12-01T17:30:47.825+01:00 level=INFO msg=&quot;Starting BlockTx&quot;
+2023/12/01 17:30:47 | Stat.go:199         | stats| INFO  | Starting StatsServer on http://localhost:9005/stats
+2023/12/01 17:30:47 | logger.go:157       | btx  | INFO  | Socket created. Connect with &#39;nc -U /tmp/gocore/BTX.sock&#39;
+2023/12/01 17:30:47 | sql.go:136          | btsql| INFO  | Using sqlite DB: /tmp/arc/data/blocktx.db?cache=shared&amp;_pragma=busy_timeout=10000&amp;_pragma=journal_mode=WAL
+2023/12/01 17:30:47 | logger.go:157       | btsql| INFO  | Socket created. Connect with &#39;nc -U /tmp/gocore/BTSQL.sock&#39;
+2023/12/01 17:30:47 | logger.go:157       | stats| INFO  | Socket created. Connect with &#39;nc -U /tmp/gocore/STATS.sock&#39;
+2023/12/01 17:30:47 | PeerManager.go:41   | btx  | INFO  | Excessive block size set to 4000000000
+2023/12/01 17:30:47 | Peer.go:157         | btx  | INFO  | [localhost:18333] Connecting to peer on TestNet
+2023/12/01 17:30:47 | Peer.go:91          | btx  | WARN  | Failed to connect to peer localhost:18333: could not dial node [localhost:18333]: dial tcp 127.0.0.1:18333: connect: connection refused
+time=2023-12-01T17:30:47.879+01:00 level=INFO msg=&quot;Starting Callbacker&quot;
+2023/12/01 17:30:47 | Peer.go:157         | btx  | INFO  | [localhost:18334] Connecting to peer on TestNet
+2023/12/01 17:30:47 | blocktx.go:45       | btx  | FATAL | SQL logic error: no such table: primary_blocktx (1)
+2023/12/01 17:30:47 | Peer.go:91          | btx  | WARN  | Failed to connect to peer localhost:18334: could not dial node [localhost:18334]: dial tcp 127.0.0.1:18334: connect: connection refused
+2023/12/01 17:30:47 | logger.go:162       | btx  | WARN  | Accept error: accept unix /tmp/gocore/BTX.sock: use of closed network connection
+</pre></div>
 </div>
-<div class="toctree-wrapper compound">
-</div>
-<div class="toctree-wrapper compound">
-</div>
-<div class="toctree-wrapper compound">
-</div>
-<div class="toctree-wrapper compound">
+<p>The perfect ARC deployment requires making many decisions about databases, networking, interface with the bitcoin network, etc.. In this repo (<a class="github reference external" href="https://github.com/rloadd/on_arc">rloadd/on_arc</a>) we provide some examples on how to run everything in a toy deployment. Do your own research on the repo content and if you feel safe, try it like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">rloadd</span><span class="o">/</span><span class="n">on_arc</span>
+<span class="n">cd</span> <span class="n">on_arc</span><span class="o">/</span><span class="n">monolithic</span>
+<span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span> 
+
+</pre></div>
 </div>
 </section>
 
@@ -401,12 +419,21 @@ possible to connect to a large number of nodes without incurring large bandwidth
   
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="cmd.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Command line</p>
+      </div>
+    </a>
     <a class="right-next"
-       href="main_api.html"
+       href="run_testing.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">API</p>
+        <p class="prev-next-title">Testing ARC</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
