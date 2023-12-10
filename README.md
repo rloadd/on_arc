@@ -266,7 +266,9 @@ This repo provides a config.yaml and some other configuration files aligned with
 Each service in its own separated container. Just one container by service.
 
 ```
-docker-compose -f docker-compose.yml up
+git clone https://github.com/rloadd/on_arc
+cd monolithic
+make startup
 ```
 
 ```
