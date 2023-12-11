@@ -3,7 +3,7 @@ services:
 
   # BITCOIN
   node1:
-    container_name: arc-node1
+    container_name: arc_node1
     image: bitcoinsv/bitcoin-sv:1.0.15
     ports:
       - "18332:18332"
@@ -14,12 +14,12 @@ services:
     healthcheck:
       test: [ "CMD", "/entrypoint.sh", "bitcoin-cli", "getinfo" ]
     volumes:
-      - node1-data:/data
+      - arc_node1-data:/data
       - ./bitcoin.conf:/data/bitcoin.conf
     command: [ "/entrypoint.sh", "bitcoind", "-connect=node2:18333", "-connect=node3:18333" ]
 
   node2:
-    container_name: arc-node2
+    container_name: arc_node2
     image: bitcoinsv/bitcoin-sv:1.0.15
     ports:
       - "48332:18332"
@@ -29,12 +29,12 @@ services:
     healthcheck:
       test: [ "CMD", "/entrypoint.sh", "bitcoin-cli", "getinfo" ]
     volumes:
-      - node2-data:/data
+      - arc_node2-data:/data
       - ./bitcoin.conf:/data/bitcoin.conf
     command: [ "/entrypoint.sh", "bitcoind", "-connect=node1:18333", "-connect=node3:18333" ]
 
   node3:
-    container_name: arc-node3
+    container_name: arc_node3
     image: bitcoinsv/bitcoin-sv:1.0.15
     ports:
       - "58332:18332"
@@ -44,14 +44,14 @@ services:
     healthcheck:
       test: [ "CMD", "/entrypoint.sh", "bitcoin-cli", "getinfo" ]
     volumes:
-      - node3-data:/data
+      - arc_node3-data:/data
       - ./bitcoin.conf:/data/bitcoin.conf
     command: [ "/entrypoint.sh", "bitcoind", "-connect=node1:18333", "-connect=node2:18333" ]
 
 
   # DB
   db:
-    container_name: arc-db
+    container_name: arc_db
     image: postgres:14
     restart: always
     environment:
@@ -59,7 +59,7 @@ services:
     - POSTGRES_PASSWORD=arcpass
     - POSTGRES_DB=blocktx
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - arc_db-data:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -d blocktx -U arcuser" ]
       interval: 5s
@@ -70,8 +70,8 @@ services:
     expose:
       - "5432"
 
-  migrate-block:
-    container_name: arc-migrate-block
+  migrate:
+    container_name: arc_migrate
     build:
       context: .
       dockerfile: ../Dockerfile.migrate
@@ -91,89 +91,47 @@ services:
 
 
   # ARC BUILD
-  # arc-image:
-  #   build:
-  #     context: .
-  #     dockerfile: ../Dockerfile.arc
-  #   image: arc-image
-
   # API
-  arc-api:
+  api:
     build:
       context: .
       dockerfile: ../Dockerfile.arc
-    image: arc-image
-
-    # image: arc-image:latest
-    ports:
-      - "9999"
-      - "9005"
-      - "9090"
-    command: [ "/service/arc", "-api=true" ]
-    volumes:
-      - arc-api-data:/data
-      - ./config.yaml:/service/config.yaml
-    deploy:
-      replicas: 10
-    depends_on:
-      # - arc-image
-      - migrate-block
-
-  lb-api:
-    image: nginx:stable-alpine
+    image: arc
     container_name: arc
-    volumes:
-      - ./api-lb-nginx.conf:/etc/nginx/nginx.conf 
-      # - ./api-lb-nginx.conf:/etc/nginx/conf.d/default.conf
     ports:
       - "9090:9090"
+    command: [ "/service/arc", "-api=true" ]
+    volumes:
+      - arc_api-data:/data
+      - ./config.yaml:/service/config.yaml
     depends_on:
-      - arc-api   
+      - migrate
 
   # METAMORPH
-  arc-metamorph:
-    # container_name: arc-metamorph
-    image: arc-image:latest
+  metamorph:
+    image: arc:latest
     command: [ "/service/arc", "-metamorph=true" ]
-    deploy:
-      replicas: 10
+    container_name: lb-metamorph
     ports:
-      - "8001"      
+      - "8001:8001"      
     volumes:
-      - arc-data:/data
+      - arc_metamorph-data:/data
       - ./config.yaml:/service/config.yaml
     depends_on:
-      - arc-api
-      - migrate-block
-      - arc-blocktx
-
-  lb-metamorph:
-    image: nginx:stable-alpine
-    container_name: lb-metamorph
-    volumes:
-      - ./metamorph-lb-nginx.conf:/etc/nginx/nginx.conf 
-    ports:
-      - "8001:80"
-    depends_on:
-      - arc-metamorph 
+      - migrate
+      - blocktx
 
   # BLOCKTX
-  arc-blocktx:
-    container_name: arc-blocktx
-    image: arc-image:latest
+  blocktx:
+    container_name: arc_blocktx
+    image: arc:latest
     command: [ "/service/arc", "-blocktx=true" ]      
     ports:
-      #blocktx
       - "8011:8011"
-      # #profiler
-      # - "9993:9993"
-      # #stats
-      # - "9035:9005"          
     volumes:
-      - arc-data:/data
+      - arc_blocktx-data:/data
       - ./config.yaml:/service/config.yaml
     depends_on:
-    # - arc_image
       db:
         condition: service_healthy
       node1:
@@ -184,33 +142,27 @@ services:
         condition: service_healthy
 
   # CALLBACKER
-  arc-callbacker:
-    container_name: arc-callbacker
-    image: arc-image:latest
+  callbacker:
+    container_name: arc_callbacker
+    image: arc:latest
     command: [ "/service/arc", "-callbacker=true" ]      
-    hostname: dummy-callback
     ports:
-      #blocktx
       - "8021:8021"
-      #profiler
-      - "9994:9994"
-      #stats
-      - "9045:9005"       
     volumes:
-      - arc-data:/data
       - ./config.yaml:/service/config.yaml
     depends_on:
-      - arc-api
-      - arc-metamorph
-      - migrate-block
+      - api
+      - metamorph
+      - migrate
 
-  dummy-callback:
-    image: nginx:stable-alpine
-    container_name: dummy-callback    
-    # volumes:
-      # - ./dummy-callback.conf:/etc/nginx/nginx.conf 
-    ports:
-      - "9000:80"
+  # dummy-callback:
+  #   build:
+  #     context: app_third
+  #   image: dummy_callback
+  #   container_name: dummy_callback    
+  #   ports:
+  #     - "9000:3000"
+
 
   tests:
     container_name: arc-tests
@@ -218,23 +170,20 @@ services:
       dockerfile: ../Dockerfile.arc.test
       context: .
     depends_on:
-      - arc-callbacker
-
-
-#networks:
-#  loadbalancing-api:
-#  loadbalancing-metamorph:
+      - api
 
 volumes:
-  arc-api-data:
+  arc_api-data:
     external: false
-  arc-data:
+  arc_metamorph-data:
     external: false    
-  node1-data:
+  arc_blocktx-data:
+    external: false    
+  arc_node1-data:
     external: false
-  node2-data:
+  arc_node2-data:
     external: false
-  node3-data:
+  arc_node3-data:
     external: false
-  postgres-data:
+  arc_db-data:
     external: false

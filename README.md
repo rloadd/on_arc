@@ -13,7 +13,7 @@ This repo contains tips and suggestions for getting up and running and testing A
 
 ## What is ARC
 
-ARC is an ambitious cloud-native open source project sponsored by the Bitcoin Association to be the interface to the Bitcoin SV network.
+ARC is an ambitious cloud-native open source project sponsored by the Bitcoin Association to be the interface with the Bitcoin SV network.
 
 ARC is a large project pursuing an ambitious goal of performance in transactions per second. From a software project point of view, it is based on microservices designed to scale independently, native cloud technologies, performance-enhancing storage and data structures, continuous integration of the code lifecycle, testing and code quality, various dimensions of observability, etc.
 
@@ -28,7 +28,7 @@ Second, the ARC is being deployed right now (December 2023). Some details or dys
 
 Finally, this repo is a best effort project. Apologies for any inaccuracies, inconvenience if any misunderstandings occur, and apologies if my update pace is muuuuuch slower. Official sources are listed above.
 
-At https://rloadd.github.io/on_arc/ (this repo) we are unifying the ARC documentation and expanding some parts that can speed up the understanding for those who want to deploy their own ARC instance. The following sections of this README are a shortcut to running ARC for testing purposes and will eventually be included in the attached github pages as well.
+At https://rloadd.github.io/on_arc/ (github pages of this repo) we are unifying the ARC documentation and expanding some parts that can speed up the understanding for those who want to deploy their own ARC instance. The following sections of this README are a shortcut to running ARC for testing purposes and will eventually be included in the attached github pages as well.
 
 
 ## Testing
@@ -37,7 +37,7 @@ Why does the tests appear first ? That's where I would start. Surely to believe 
 
 ### Testing as dev
 
-We can run the same tests that the development team has integrated in CI/CD. More precisely, there is a makefile that allows you to build the artifacts of the project, to run the tests and finally to stop everything when the tests are done.
+We can run the same tests the development team has integrated in CI/CD. More precisely, there is a Makefile that allows you to build the artifacts of the project, to run the tests and finally to stop everything when the tests are done.
 
 ```
 git clone https://github.com/bitcoin-sv/arc
@@ -48,6 +48,7 @@ make clean_restart_e2e_test
 
 
 In case you are only interested on review the result of the tests you can discard the rest of console logs using this sentence instead:
+
 ```
 make clean_restart_e2e_test 2>&1 |grep test
 ``` 
@@ -267,9 +268,11 @@ Each service in its own separated container. Just one container by service.
 
 ```
 git clone https://github.com/rloadd/on_arc
-cd monolithic
+cd deployments/monolithic
 make startup
 ```
+
+Containers lifted:
 
 ```
 $ docker ps
@@ -285,52 +288,102 @@ e2e9e4e1ec42   bitcoinsv/bitcoin-sv:1.0.15   "/entrypoint.sh /ent…"   2 hours 
 
 ```
 
+Afterwards, unnecessary artifacts can be eliminated performing a "clean":
+
+```
+make clean  #clean_full is harder
+```
+
+
 #### Balanced microservices
 
 A little hack with docker-compose let us to run multiple instances of API and Metamorph services. Nginx do the magic.
 
 ```
-docker-compose -f docker-compose-decoupled-lb.yml up
-```
+make startup-replica
 
+```
 
 Several containers are launched for some services.
 
 ```
 $ docker ps
-CONTAINER ID   IMAGE                         COMMAND                  CREATED         STATUS                   PORTS                                                                                                                                   NAMES
-12f31a5c216c   arc-image:latest              "/service/arc -callb…"   3 minutes ago   Up 3 minutes             0.0.0.0:8021->8021/tcp, :::8021->8021/tcp, 0.0.0.0:9994->9994/tcp, :::9994->9994/tcp, 0.0.0.0:9045->9005/tcp, :::9045->9005/tcp         arc-callbacker
-b2ec8528249e   nginx:stable-alpine           "/docker-entrypoint.…"   3 minutes ago   Up 3 minutes             0.0.0.0:8001->80/tcp, :::8001->80/tcp                                                                                                   lb-metamorph
-15da43cf10df   arc-image:latest              "/service/arc -metam…"   3 minutes ago   Up 3 minutes             0.0.0.0:32812->8001/tcp, :::32812->8001/tcp                                                                                             decoupled_arc-metamorph_5
-901375b00103   arc-image:latest              "/service/arc -metam…"   3 minutes ago   Up 3 minutes             0.0.0.0:32807->8001/tcp, :::32807->8001/tcp                                                                                             decoupled_arc-metamorph_8
-912c797787b5   arc-image:latest              "/service/arc -metam…"   3 minutes ago   Up 3 minutes             0.0.0.0:32809->8001/tcp, :::32809->8001/tcp                                                                                             decoupled_arc-metamorph_6
-a183d135040f   arc-image:latest              "/service/arc -metam…"   3 minutes ago   Up 3 minutes             0.0.0.0:32808->8001/tcp, :::32808->8001/tcp                                                                                             decoupled_arc-metamorph_9
-0b8faeb376ef   arc-image:latest              "/service/arc -metam…"   3 minutes ago   Up 3 minutes             0.0.0.0:32810->8001/tcp, :::32810->8001/tcp                                                                                             decoupled_arc-metamorph_10
-f66f37a6dd97   arc-image:latest              "/service/arc -metam…"   3 minutes ago   Up 3 minutes             0.0.0.0:32811->8001/tcp, :::32811->8001/tcp                                                                                             decoupled_arc-metamorph_2
-ca663941309d   arc-image:latest              "/service/arc -metam…"   3 minutes ago   Up 3 minutes             0.0.0.0:32805->8001/tcp, :::32805->8001/tcp                                                                                             decoupled_arc-metamorph_7
-5e53ef269c29   arc-image:latest              "/service/arc -metam…"   3 minutes ago   Up 3 minutes             0.0.0.0:32806->8001/tcp, :::32806->8001/tcp                                                                                             decoupled_arc-metamorph_3
-2894429a841f   arc-image:latest              "/service/arc -metam…"   3 minutes ago   Up 3 minutes             0.0.0.0:32804->8001/tcp, :::32804->8001/tcp                                                                                             decoupled_arc-metamorph_4
-6674c3027c2d   arc-image:latest              "/service/arc -metam…"   3 minutes ago   Up 3 minutes             0.0.0.0:32803->8001/tcp, :::32803->8001/tcp                                                                                             decoupled_arc-metamorph_1
-236d43df401a   nginx:stable-alpine           "/docker-entrypoint.…"   4 minutes ago   Up 4 minutes             80/tcp, 0.0.0.0:9090->9090/tcp, :::9090->9090/tcp                                                                                       arc
-782b9534c795   arc-image                     "/service/arc -api=t…"   4 minutes ago   Up 4 minutes             0.0.0.0:32802->9005/tcp, :::32802->9005/tcp, 0.0.0.0:32801->9090/tcp, :::32801->9090/tcp, 0.0.0.0:32800->9999/tcp, :::32800->9999/tcp   decoupled_arc-api_9
-7341a9c26d90   arc-image                     "/service/arc -api=t…"   4 minutes ago   Up 4 minutes             0.0.0.0:32793->9005/tcp, :::32793->9005/tcp, 0.0.0.0:32792->9090/tcp, :::32792->9090/tcp, 0.0.0.0:32791->9999/tcp, :::32791->9999/tcp   decoupled_arc-api_2
-7e0f1cd4ecd1   arc-image                     "/service/arc -api=t…"   4 minutes ago   Up 4 minutes             0.0.0.0:32796->9005/tcp, :::32796->9005/tcp, 0.0.0.0:32795->9090/tcp, :::32795->9090/tcp, 0.0.0.0:32794->9999/tcp, :::32794->9999/tcp   decoupled_arc-api_6
-604d55dccf4d   arc-image                     "/service/arc -api=t…"   4 minutes ago   Up 4 minutes             0.0.0.0:32787->9005/tcp, :::32787->9005/tcp, 0.0.0.0:32786->9090/tcp, :::32786->9090/tcp, 0.0.0.0:32785->9999/tcp, :::32785->9999/tcp   decoupled_arc-api_7
-628c92b1e893   arc-image                     "/service/arc -api=t…"   4 minutes ago   Up 4 minutes             0.0.0.0:32799->9005/tcp, :::32799->9005/tcp, 0.0.0.0:32798->9090/tcp, :::32798->9090/tcp, 0.0.0.0:32797->9999/tcp, :::32797->9999/tcp   decoupled_arc-api_3
-955dc5b7458a   arc-image                     "/service/arc -api=t…"   4 minutes ago   Up 4 minutes             0.0.0.0:32790->9005/tcp, :::32790->9005/tcp, 0.0.0.0:32789->9090/tcp, :::32789->9090/tcp, 0.0.0.0:32788->9999/tcp, :::32788->9999/tcp   decoupled_arc-api_10
-2915aef0f6bb   arc-image                     "/service/arc -api=t…"   4 minutes ago   Up 4 minutes             0.0.0.0:32784->9005/tcp, :::32784->9005/tcp, 0.0.0.0:32783->9090/tcp, :::32783->9090/tcp, 0.0.0.0:32782->9999/tcp, :::32782->9999/tcp   decoupled_arc-api_4
-f1887fcf531b   arc-image                     "/service/arc -api=t…"   4 minutes ago   Up 4 minutes             0.0.0.0:32781->9005/tcp, :::32781->9005/tcp, 0.0.0.0:32780->9090/tcp, :::32780->9090/tcp, 0.0.0.0:32779->9999/tcp, :::32779->9999/tcp   decoupled_arc-api_8
-732abb86f7ec   arc-image                     "/service/arc -api=t…"   4 minutes ago   Up 4 minutes             0.0.0.0:32778->9005/tcp, :::32778->9005/tcp, 0.0.0.0:32777->9090/tcp, :::32777->9090/tcp, 0.0.0.0:32776->9999/tcp, :::32776->9999/tcp   decoupled_arc-api_5
-9bb64bae7b73   arc-image                     "/service/arc -api=t…"   4 minutes ago   Up 4 minutes             0.0.0.0:32775->9005/tcp, :::32775->9005/tcp, 0.0.0.0:32774->9090/tcp, :::32774->9090/tcp, 0.0.0.0:32773->9999/tcp, :::32773->9999/tcp   decoupled_arc-api_1
-5e3df16c255a   nginx:stable-alpine           "/docker-entrypoint.…"   4 minutes ago   Up 4 minutes             0.0.0.0:9000->80/tcp, :::9000->80/tcp                                                                                                   dummy-callback
-9fe22388f393   arc-image:latest              "/service/arc -block…"   2 hours ago     Up 3 minutes             0.0.0.0:8011->8011/tcp, :::8011->8011/tcp                                                                                               arc-blocktx
-8280e1622824   postgres:14                   "docker-entrypoint.s…"   2 hours ago     Up 4 minutes (healthy)   0.0.0.0:5432->5432/tcp, :::5432->5432/tcp                                                                                               arc-db
-e256290541f4   bitcoinsv/bitcoin-sv:1.0.15   "/entrypoint.sh /ent…"   2 hours ago     Up 4 minutes (healthy)   8332-8333/tcp, 9332-9333/tcp, 18333/tcp, 0.0.0.0:48332->18332/tcp, :::48332->18332/tcp                                                  arc-node2
-e6ad47689ad8   bitcoinsv/bitcoin-sv:1.0.15   "/entrypoint.sh /ent…"   2 hours ago     Up 4 minutes (healthy)   8332-8333/tcp, 9332-9333/tcp, 18333/tcp, 0.0.0.0:58332->18332/tcp, :::58332->18332/tcp                                                  arc-node3
-e2e9e4e1ec42   bitcoinsv/bitcoin-sv:1.0.15   "/entrypoint.sh /ent…"   2 hours ago     Up 4 minutes (healthy)   8332-8333/tcp, 9332-9333/tcp, 18333/tcp, 28332/tcp, 0.0.0.0:18332->18332/tcp, :::18332->18332/tcp                                       arc-node1
-
+CONTAINER ID   IMAGE                         COMMAND                  CREATED          STATUS                   PORTS                                                                                               NAMES
+3a3fbc59ca59   nginx:stable-alpine           "/docker-entrypoint.…"   5 minutes ago    Up 5 minutes             0.0.0.0:8001->80/tcp, :::8001->80/tcp                                                               lb_metamorph
+1f391ffa12c3   arc:latest                    "/service/arc -callb…"   5 minutes ago    Up 5 minutes             0.0.0.0:8021->8021/tcp, :::8021->8021/tcp                                                           arc_callbacker
+2dbe896f8c06   nginx:stable-alpine           "/docker-entrypoint.…"   5 minutes ago    Up 5 minutes             80/tcp, 0.0.0.0:9090->9090/tcp, :::9090->9090/tcp                                                   arc
+24ff4aefc876   arc:latest                    "/service/arc -metam…"   5 minutes ago    Up 5 minutes             0.0.0.0:32862->8001/tcp, :::32862->8001/tcp                                                         decoupled_metamorph_3
+1d0b15bf9ea4   arc:latest                    "/service/arc -metam…"   5 minutes ago    Up 5 minutes             0.0.0.0:32863->8001/tcp, :::32863->8001/tcp                                                         decoupled_metamorph_2
+c414bec88ca5   arc:latest                    "/service/arc -metam…"   5 minutes ago    Up 5 minutes             0.0.0.0:32861->8001/tcp, :::32861->8001/tcp                                                         decoupled_metamorph_1
+775b97354904   arc                           "/service/arc -api=t…"   5 minutes ago    Up 5 minutes             0.0.0.0:32859->9090/tcp, :::32859->9090/tcp                                                         decoupled_api_1
+13e2f37deba2   arc                           "/service/arc -api=t…"   5 minutes ago    Up 5 minutes             0.0.0.0:32860->9090/tcp, :::32860->9090/tcp                                                         decoupled_api_2
+9019543c6136   arc:latest                    "/service/arc -block…"   5 minutes ago    Up 5 minutes             0.0.0.0:8011->8011/tcp, :::8011->8011/tcp                                                           arc_blocktx
+9ff06d5bf14c   bitcoinsv/bitcoin-sv:1.0.15   "/entrypoint.sh /ent…"   5 minutes ago    Up 5 minutes (healthy)   8332-8333/tcp, 9332-9333/tcp, 18333/tcp, 0.0.0.0:58332->18332/tcp, :::58332->18332/tcp              arc_node3
+de8ba9490b7d   bitcoinsv/bitcoin-sv:1.0.15   "/entrypoint.sh /ent…"   5 minutes ago    Up 5 minutes (healthy)   8332-8333/tcp, 9332-9333/tcp, 18333/tcp, 0.0.0.0:48332->18332/tcp, :::48332->18332/tcp              arc_node2
+45d25dff8c1a   bitcoinsv/bitcoin-sv:1.0.15   "/entrypoint.sh /ent…"   5 minutes ago    Up 5 minutes (healthy)   8332-8333/tcp, 9332-9333/tcp, 18333/tcp, 28332/tcp, 0.0.0.0:18332->18332/tcp, :::18332->18332/tcp   arc_node1
+bffa1a9711cd   postgres:14                   "docker-entrypoint.s…"   5 minutes ago    Up 5 minutes (healthy)   0.0.0.0:5432->5432/tcp, :::5432->5432/tcp                                                           arc_db
 
 ```
+
+
+
+The results of testing are:
+
+```
+$ docker logs arc_tests
+2023/12/11 18:55:41 WARN: No config file 'settings.conf'
+2023/12/11 18:55:41 WARN: No local config file 'settings_local.conf'
+2023/12/11 18:55:41 current block height: 2029
+=== RUN   TestBatchChainedTxs
+=== RUN   TestBatchChainedTxs/submit_batch_of_chained_transactions_-_ext_format
+    utils.go:68: new address: mwXSfxuAH1Y7dvV1QRJ9niyzE25rnCzjTg
+    utils.go:72: new private key: cPsUeETGVZ8vCJrD6FM1kWj6pKX9PLkFDyxwVvuitPqxVH84JGbM
+    utils.go:78: account test-account created
+Amount to generate: 100
+    arc_txt_endpoint_test.go:126: generated 100 block(s): block hash: 626c112996af28bedbbf2bacf5969467a0f5f511a3579cde06b9d66e48ba56d9
+    arc_txt_endpoint_test.go:128: generated address: mwXSfxuAH1Y7dvV1QRJ9niyzE25rnCzjTg
+    arc_txt_endpoint_test.go:130: sent 0.001000 to mwXSfxuAH1Y7dvV1QRJ9niyzE25rnCzjTg: d5b242acaf647d5dbbd57646d2ac29227925741354bdfdbca850e4083e33e6c4
+    arc_txt_endpoint_test.go:132: sent 0.020000 to mwXSfxuAH1Y7dvV1QRJ9niyzE25rnCzjTg: 3b33945d3bfa2490332e4f90a57abfb6b33662d201d3634c138b57d668649530
+    arc_txt_endpoint_test.go:133: sent 0.02 BSV to: 3b33945d3bfa2490332e4f90a57abfb6b33662d201d3634c138b57d668649530
+Amount to generate: 1
+    arc_txt_endpoint_test.go:135: generated 1 block(s): block hash: 442eda0b638af4053bd7eee88f21c0993766c0521e5bb189a8110725be0c01a0
+    arc_txt_endpoint_test.go:136: generated 1 block: 442eda0b638af4053bd7eee88f21c0993766c0521e5bb189a8110725be0c01a0
+UTXO Txid: 3b33945d3bfa2490332e4f90a57abfb6b33662d201d3634c138b57d668649530, Amount: 0.020000, Address: mwXSfxuAH1Y7dvV1QRJ9niyzE25rnCzjTg
+UTXO Txid: d5b242acaf647d5dbbd57646d2ac29227925741354bdfdbca850e4083e33e6c4, Amount: 0.001000, Address: mwXSfxuAH1Y7dvV1QRJ9niyzE25rnCzjTg
+--- PASS: TestBatchChainedTxs (14.71s)
+    --- PASS: TestBatchChainedTxs/submit_batch_of_chained_transactions_-_ext_format (14.71s)
+=== RUN   TestPostCallbackToken
+=== RUN   TestPostCallbackToken/post_transaction_with_callback_url_and_token
+    utils.go:68: new address: miXbV3w4qRPaXn1sAb2oskJRyXa4ezBYe8
+    utils.go:72: new private key: cQqXsbDTwVDpxQvRXWkDZF3dX8Pg4gETtkAgJFCQ3YMqk8zZrcfi
+    utils.go:78: account test-account created
+Amount to generate: 100
+    arc_txt_endpoint_test.go:256: generated 100 block(s): block hash: 068b47be4a4da072bba02b01f9a706355b3fa14903f8ed50ea08e4263d4fe8c6
+    arc_txt_endpoint_test.go:258: generated address: miXbV3w4qRPaXn1sAb2oskJRyXa4ezBYe8
+    arc_txt_endpoint_test.go:260: sent 0.001000 to miXbV3w4qRPaXn1sAb2oskJRyXa4ezBYe8: ebcaf452a737251bcf7aec2373d320a8766332d1192527665af8f12b9642b8cf
+    arc_txt_endpoint_test.go:262: sent 0.020000 to miXbV3w4qRPaXn1sAb2oskJRyXa4ezBYe8: 40910e3a5c8cfa1e41ca165abedbffdd8fac49333099212e853b0f09cf4eb10b
+    arc_txt_endpoint_test.go:263: sent 0.02 BSV to: 40910e3a5c8cfa1e41ca165abedbffdd8fac49333099212e853b0f09cf4eb10b
+Amount to generate: 1
+    arc_txt_endpoint_test.go:265: generated 1 block(s): block hash: 0baf7aeae30c31a438d76e4c878e6ad52c23a3446c31d2cacd07f7a93076f885
+    arc_txt_endpoint_test.go:266: generated 1 block: 0baf7aeae30c31a438d76e4c878e6ad52c23a3446c31d2cacd07f7a93076f885
+UTXO Txid: 40910e3a5c8cfa1e41ca165abedbffdd8fac49333099212e853b0f09cf4eb10b, Amount: 0.020000, Address: miXbV3w4qRPaXn1sAb2oskJRyXa4ezBYe8
+UTXO Txid: ebcaf452a737251bcf7aec2373d320a8766332d1192527665af8f12b9642b8cf, Amount: 0.001000, Address: miXbV3w4qRPaXn1sAb2oskJRyXa4ezBYe8
+Amount to generate: 10
+    arc_txt_endpoint_test.go:365: starting callback server
+    arc_txt_endpoint_test.go:372: generated 10 block(s): block hash: 6cf301552e7456f68c68e003f28a91e40347efb278d96d3dbdc57a048b7cc626
+    arc_txt_endpoint_test.go:378: callback iteration 0
+    arc_txt_endpoint_test.go:392: callback not received
+    arc_txt_endpoint_test.go:309: shutting down callback listener
+--- FAIL: TestPostCallbackToken (34.98s)
+    --- FAIL: TestPostCallbackToken/post_transaction_with_callback_url_and_token (34.98s)
+FAIL
+FAIL    e2e_tests       49.738s
+FAIL
+
+```
+
+Using this deployment, it fails receiving the callback. Work in progress.
+
 
 
 ### Batching transactions
@@ -352,13 +405,6 @@ NOTE2: broadcaster in "cmd" fashion doesn't support any option "-config". I've d
 go run cmd/broadcaster/main.go -config=../arc_cover/decoupled/ -api=true -consolidate -authorization=mainnet_XXX -batch=100 1000
 
 ```
-
-
-## Dummy third app
-
-It could be interesting to receive those "post" that the callbacker sends back to the customer application, even if they are corresponding to a tests (previous section). For that reason, we have included a dummy callback receiver that logs to console any POST sent back to 0.0.0.0:9000 from ARC.
-
-Why 0.0.0.0:9000 ? Just because this endpoint is for now hardcoded and we are trying to test directly from uploaded branches.
 
 
 ## Digging into database data

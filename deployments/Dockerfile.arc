@@ -4,12 +4,13 @@ FROM golang:1.21.3 as maker
 WORKDIR /app
 ENV BRANCH=main
 RUN git clone --branch $BRANCH https://github.com/bitcoin-sv/arc.git
+WORKDIR /app/arc
 
 # Download all dependencies. Dependencies will be cached if the go.mod and the go.sum files are not changed
-WORKDIR /app/arc
-RUN go mod vendor
+# RUN go mod vendor
 RUN make build_release
 
-RUN chmod +x /app/arc/build/arc_linux_amd64
-
-CMD ["/app/arc/build/arc_linux_amd64"]
+WORKDIR /service
+RUN cp /app/arc/build/arc_linux_amd64 /service/arc
+RUN chmod a+x /service/arc
+CMD ["/service/arc"]

@@ -1,5 +1,7 @@
 version: '3'
 services:
+
+  # BITCOIN
   node1:
     container_name: arc_node1
     image: bitcoinsv/bitcoin-sv:1.0.15
@@ -46,6 +48,8 @@ services:
       - ./bitcoin.conf:/data/bitcoin.conf
     command: [ "/entrypoint.sh", "bitcoind", "-connect=node1:18333", "-connect=node2:18333" ]
 
+
+  # DB
   db:
     container_name: arc_db
     image: postgres:14
@@ -67,7 +71,7 @@ services:
       - "5432"
 
   migrate:
-    container_name: arc-migrate-block
+    container_name: arc_migrate
     build:
       context: .
       dockerfile: ../Dockerfile.migrate
@@ -85,35 +89,102 @@ services:
       db:
         condition: service_healthy
 
-  arc:
+
+  # API
+  api:
     build:
       context: .
-      dockerfile: ../Dockerfile.arc      
+      dockerfile: ../Dockerfile.arc
     image: arc
+    ports:
+      - "9090"
+    command: [ "/service/arc", "-api=true" ]
+    volumes:
+      - ./config.yaml:/service/config.yaml
+    depends_on:
+      - migrate    
+    deploy:
+      replicas: 2
+
+  lb_api:
+    image: nginx:stable-alpine
     container_name: arc
+    volumes:
+      - ./api-lb-nginx.conf:/etc/nginx/nginx.conf 
+    ports:
+      - "9090:9090"
+    depends_on:
+      - api
+   
+
+  # METAMORPH
+  metamorph:
+    image: arc:latest
+    command: [ "/service/arc", "-metamorph=true" ]
+    ports:
+      - "8001"      
+    volumes:
+      - ./config.yaml:/service/config.yaml
+    depends_on:
+      - migrate
+      - blocktx      
+    deploy:
+      replicas: 3
+
+  lb_metamorph:
+    image: nginx:stable-alpine
+    container_name: lb_metamorph
+    volumes:
+      - ./metamorph-lb-nginx.conf:/etc/nginx/nginx.conf 
+    ports:
+      - "8001:80"
+    depends_on:
+      - metamorph
+
+  # BLOCKTX
+  blocktx:
+    container_name: arc_blocktx
+    image: arc:latest
+    command: [ "/service/arc", "-blocktx=true" ]      
     ports:
       - "8011:8011"
-      - "9090:9090"
-      - "9999:9999"
     volumes:
-      - ./config.yaml:/app/arc/build/config.yaml
+      - ./config.yaml:/service/config.yaml
     depends_on:
-      - node1
-      - node2
-      - node3
       - migrate
 
-  tests:
-    container_name: arc-tests
-    image: arc-tests
+  # CALLBACKER
+  callbacker:
+    container_name: arc_callbacker
+    image: arc:latest
+    command: [ "/service/arc", "-callbacker=true" ]      
+    ports:
+      - "8021:8021"
+    volumes:
+      - ./config.yaml:/service/config.yaml
+    depends_on:
+      - metamorph
 
+
+  # dummy-callback:
+  #   build:
+  #     context: app_third
+  #   image: dummy_callback
+  #   container_name: dummy_callback    
+  #   ports:
+  #     - "9000:3000"
+
+  tests:
+    container_name: arc_tests
     build:
       dockerfile: ../Dockerfile.arc.test
       context: .
     depends_on:
-      - arc
+      - callbacker
+
 
 volumes:
+
   arc_node1-data:
     external: false
   arc_node2-data:
