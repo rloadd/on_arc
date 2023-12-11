@@ -267,8 +267,8 @@ This repo provides a config.yaml and some other configuration files aligned with
 Each service in its own separated container. Just one container by service.
 
 ```
-git clone https://github.com/rloadd/on_arc
-cd deployments/monolithic
+git clone https://github.com/rloadd/on_arc #this repo
+cd on_arc/deployments/monolithic
 make startup
 ```
 

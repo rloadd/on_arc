@@ -111,7 +111,7 @@ services:
   metamorph:
     image: arc:latest
     command: [ "/service/arc", "-metamorph=true" ]
-    container_name: lb-metamorph
+    container_name: lb_metamorph
     ports:
       - "8001:8001"      
     volumes:
@@ -171,6 +171,7 @@ services:
       context: .
     depends_on:
       - api
+      - metamorph
 
 volumes:
   arc_api-data:
